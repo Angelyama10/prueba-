@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/NotoSerifKhitanSmallScript-Regular.ttf",
+      "sha1": "eb5d8b6f0d3848740e6dc7e8b8df4360fb1e4275"
+    },
+    {
+      "path": "assets/fonts/YanoneKaffeesatz-Regular.ttf",
+      "sha1": "8e52d8409fb1b576362596d9df5b012b11ad145e"
+    },
+    {
+      "path": "assets/fonts/YanoneKaffeesatz-SemiBold.ttf",
+      "sha1": "efb8e3936801b1e2e12023fe44f9b9131b8388e8"
+    }
+  ]
+}
