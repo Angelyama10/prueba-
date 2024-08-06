@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 45, // Ajusta el tamaño según sea necesario
     fontWeight: 'bold',
     color: '#000000', // Ajusta el color según sea necesario
-    fontFamily: 'Yanone Kaffeesatz', // Asegúrate de tener esta fuente en tu proyecto
+    fontFamily: 'YanoneKaffeesatz-Regular', // Asegúrate de tener esta fuente en tu proyecto
     top: '50%', // Ajusta la posición según sea necesario
     left: '50%',
     transform: [{ translateX: -98 }, { translateY: -10 }],

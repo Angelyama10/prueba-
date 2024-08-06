@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -25,15 +25,29 @@ const LoginScreen = () => {
           <Text style={styles.loginButtonText}>Entrar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Text style={styles.forgotPasswordText}>¿Has olvidado tu contraseña?</Text>
-          <Text style={styles.resetPasswordText}>Recuperar contraseña</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Text style={styles.noAccountText}>¿No tienes usuario?</Text>
-          <Text style={styles.registerText}>Regístrate</Text>
-        </TouchableOpacity>
+        <View style={styles.linksContainer}>
+          <View style={styles.leftLinks}>
+            <TouchableOpacity>
+              <Text style={styles.forgotPasswordText}>¿Has olvidado tu contraseña?</Text>
+              <Text style={styles.resetPasswordText}>Recuperar contraseña</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        
+        <View style={styles.leftLinks}>
+          <TouchableOpacity>
+            <Text style={styles.UsuarioText}>¿No tienes usuario?</Text>
+          </TouchableOpacity>
+        </View>
+        
+        <View style={styles.rightButton}>
+          <TouchableOpacity 
+            style={styles.registerButton} 
+            onPress={() => navigation.navigate('NuevoUsuario')} // Navega a la nueva pantalla
+          >
+            <Text style={styles.registerButtonText}>Regístrate</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -42,99 +56,126 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF', // Fondo blanco para el contenedor principal
     alignItems: 'center',
-    backgroundColor: '#B5D6FD', // Color de fondo azul claro
-    borderRadius: 5, // Borde redondeado de 5 px
   },
   topContainer: {
     alignItems: 'center',
-    backgroundColor: '#ffff',
     width: '100%',
-    paddingVertical: 20,
-    marginBottom: 20,
+    paddingVertical: 30,
+    backgroundColor: '#FFFFFF',
   },
   welcomeText: {
-    fontSize: 45,
-    fontFamily: 'YanoneKaffeesatz-SemiBold', // Usa el nombre de la fuente aquí
+    fontSize: 35,
+    fontFamily: 'YanoneKaffeesatz-Regular',
     marginTop: 20,
     marginBottom: 10,
+    color: '#000000',
   },
   loginImage: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
+    marginBottom: 10,
   },
   loginText: {
     fontSize: 25,
-    fontFamily: 'YanoneKaffeesatz-SemiBold', // Usa el nombre de la fuente aquí
+    fontFamily: 'Poppins-Regular',
     marginBottom: 20,
+    color: '#000000',
   },
   formContainer: {
     flex: 1,
-    width: '80%',
-    backgroundColor: '#B5D6FD', // Color de fondo azul claro
-    borderRadius: 20,
+    width: '100%',
+    backgroundColor: '#B5D6FD', // Color de fondo azul para el formulario
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 20,
     borderColor: '#ADD8E6',
     borderWidth: 1,
-    marginBottom: 20,
     alignItems: 'center',
   },
   inputContainer: {
-    width: '100%',
+    width: '90%',
     marginBottom: 20,
   },
   labelText: {
-    fontSize: 40,
-    fontFamily: 'YanoneKaffeesatz-SemiBold', // Asegúrate de que este nombre sea correcto
+    fontSize: 16,
+    fontFamily: 'DMSans_18pt-Regular',
     marginBottom: 5,
+    color: '#000000',
   },
   input: {
-    height: 40,
+    height: 50, // Aumentar la altura del campo de entrada de texto
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
+    fontSize: 18, // Aumentar el tamaño de la fuente
   },
   loginButton: {
     alignSelf: 'flex-end',
-    width: '30%',
-    height: 40,
+    width: '50%',
+    height: 50, // Aumentar la altura del botón
     backgroundColor: '#28a745',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 20,
-  },
+  },  
   loginButtonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 18,
-    fontFamily: 'DMSans-Regular', // Asegúrate de que este nombre sea correcto
+    fontFamily: 'DMSans_18pt-Regular',
+  },
+  linksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 10,
+  },
+  leftLinks: {
+    flex: 1,
+  },
+  rightButton: {
+    flex: 2,
+    alignItems: 'flex-end',
   },
   forgotPasswordText: {
-    fontSize: 14,
-    fontFamily: 'DMSans-Regular', // Asegúrate de que este nombre sea correcto
-    color: '#000',
+    fontSize: 16,
+    fontFamily: 'DMSans_18pt-Regular',
+    color: '#000000',
+  },
+  UsuarioText:{
+    fontSize: 16,
+    fontFamily: 'DMSans_18pt-Regular',
+    marginBottom: 5,
+    color: '#000000',
   },
   resetPasswordText: {
-    fontSize: 14,
-    fontFamily: 'DMSans-Regular', // Asegúrate de que este nombre sea correcto
+    fontSize: 16,
+    fontFamily: 'DMSans_18pt-Regular',
     color: '#1E90FF',
     marginBottom: 20,
+  },
+  registerButton: {
+    backgroundColor: '#5A9BD3', // Color del botón de registro
+    paddingVertical: 15, // Aumentar el padding vertical
+    paddingHorizontal: 90, // Aumentar el padding horizontal
+    borderRadius: 20,
+  },
+  registerButtonText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontFamily: 'DMSans_18pt-Regular',
   },
   noAccountText: {
     fontSize: 14,
-    fontFamily: 'DMSans-Regular', // Asegúrate de que este nombre sea correcto
-    color: '#000',
-  },
-  registerText: {
-    fontSize: 14,
-    fontFamily: 'DMSans-Regular', // Asegúrate de que este nombre sea correcto
-    color: '#1E90FF',
-    marginBottom: 40,
-  },
+    fontFamily: 'DMSans_18pt-Regular',
+    color: '#000000',
+    textAlign: 'center',
+  }
 });
 
 export default LoginScreen;
