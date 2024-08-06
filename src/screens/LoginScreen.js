@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.rightButton}>
           <TouchableOpacity 
             style={styles.registerButton} 
-            onPress={() => navigation.navigate('NuevoUsuario')} // Navega a la nueva pantalla
+            onPress={() => navigation.navigate('HolaMundo')} // Navega a la nueva pantalla
           >
             <Text style={styles.registerButtonText}>Regístrate</Text>
           </TouchableOpacity>
