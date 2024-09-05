@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-
 const { width } = Dimensions.get('window');
+
 
 const LoginScreen = ({ navigation }) => {
   return (
@@ -26,7 +26,6 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.loginButtonText}>Entrar</Text>
         </TouchableOpacity>
-
         <View style={styles.linksContainer}>
           <TouchableOpacity>
             <Text style={styles.forgotPasswordText}>¿Has olvidado tu contraseña?</Text>

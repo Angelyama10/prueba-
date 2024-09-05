@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "nombre": "Paracetamol",
+    "presentacion": "pastillas",
+    "contenido": 500
+  },
+  {
+    "id": 2,
+    "nombre": "Ibuprofeno",
+    "presentacion": "jarabe",
+    "contenido": 100
+  },
+  {
+    "id": 3,
+    "nombre": "Amoxicilina",
+    "presentacion": "píldora",
+    "contenido": 250
+  },
+  {
+    "id": 4,
+    "nombre": "Diclofenaco",
+    "presentacion": "inyecciones",
+    "contenido": 75
+  },
+  {
+    "id": 5,
+    "nombre": "Loratadina",
+    "presentacion": "pastillas",
+    "contenido": 10
+  },
+  {
+    "id": 6,
+    "nombre": "Ranitidina",
+    "presentacion": "tabletas",
+    "contenido": 150
+  },
+  {
+    "id": 7,
+    "nombre": "Cefalexina",
+    "presentacion": "cápsulas",
+    "contenido": 500
+  },
+  {
+    "id": 8,
+    "nombre": "Azitromicina",
+    "presentacion": "jarabe",
+    "contenido": 200
+  },
+  {
+    "id": 9,
+    "nombre": "Metformina",
+    "presentacion": "pastillas",
+    "contenido": 850
+  },
+  {
+    "id": 10,
+    "nombre": "Aspirina",
+    "presentacion": "tabletas",
+    "contenido": 100
+  },
+  {
+    "id": 11,
+    "nombre": "Clonazepam",
+    "presentacion": "gotas",
+    "contenido": 2.5
+  },
+  {
+    "id": 12,
+    "nombre": "Simvastatina",
+    "presentacion": "cápsulas",
+    "contenido": 40
+  },
+  {
+    "id": 13,
+    "nombre": "Omeprazol",
+    "presentacion": "cápsulas",
+    "contenido": 20
+  },
+  {
+    "id": 14,
+    "nombre": "Lisinopril",
+    "presentacion": "tabletas",
+    "contenido": 10
+  },
+  {
+    "id": 15,
+    "nombre": "Furosemida",
+    "presentacion": "inyectable",
+    "contenido": 20
+  },
+  {
+    "id": 16,
+    "nombre": "Ciprofloxacino",
+    "presentacion": "tabletas",
+    "contenido": 500
+  },
+  {
+    "id": 17,
+    "nombre": "Dexametasona",
+    "presentacion": "inyecciones",
+    "contenido": 4
+  },
+  {
+    "id": 18,
+    "nombre": "Prednisona",
+    "presentacion": "tabletas",
+    "contenido": 50
+  },
+  {
+    "id": 19,
+    "nombre": "Tramadol",
+    "presentacion": "inyecciones",
+    "contenido": 100
+  },
+  {
+    "id": 20,
+    "nombre": "Losartan",
+    "presentacion": "tabletas",
+    "contenido": 50
+  },
+  {
+    "id": 21,
+    "nombre": "Enalapril",
+    "presentacion": "tabletas",
+    "contenido": 20
+  },
+  {
+    "id": 22,
+    "nombre": "Levotiroxina",
+    "presentacion": "tabletas",
+    "contenido": 50
+  },
+  {
+    "id": 23,
+    "nombre": "Amiodarona",
+    "presentacion": "tabletas",
+    "contenido": 200
+  },
+  {
+    "id": 24,
+    "nombre": "Claritromicina",
+    "presentacion": "tabletas",
+    "contenido": 500
+  },
+  {
+    "id": 25,
+    "nombre": "Dicloxacilina",
+    "presentacion": "cápsulas",
+    "contenido": 500
+  },
+  {
+    "id": 26,
+    "nombre": "Metoclopramida",
+    "presentacion": "inyecciones",
+    "contenido": 10
+  },
+  {
+    "id": 27,
+    "nombre": "Hidrocortisona",
+    "presentacion": "inyectable",
+    "contenido": 100
+  },
+  {
+    "id": 28,
+    "nombre": "Bromuro de ipratropio",
+    "presentacion": "aerosol",
+    "contenido": 20
+  },
+  {
+    "id": 29,
+    "nombre": "Salbutamol",
+    "presentacion": "aerosol",
+    "contenido": 100
+  },
+  {
+    "id": 30,
+    "nombre": "Acetaminofén",
+    "presentacion": "gotas",
+    "contenido": 100
+  },
+  {
+    "id": 31,
+    "nombre": "Paradoxina",
+    "presentacion": "tabletas",
+    "contenido": 400
+  },
+  {
+    "id": 32,
+    "nombre": "Paramicin",
+    "presentacion": "cápsulas",
+    "contenido": 300
+  },
+  {
+    "id": 33,
+    "nombre": "Paroxetina",
+    "presentacion": "tabletas",
+    "contenido": 20
+  },
+  {
+    "id": 34,
+    "nombre": "Ibuprozen",
+    "presentacion": "tabletas",
+    "contenido": 600
+  },
+  {
+    "id": 35,
+    "nombre": "Ibupronex",
+    "presentacion": "jarabe",
+    "contenido": 150
+  },
+  {
+    "id": 36,
+    "nombre": "Ibutrina",
+    "presentacion": "tabletas",
+    "contenido": 200
+  },
+  {
+    "id": 37,
+    "nombre": "Amoxiclav",
+    "presentacion": "tabletas",
+    "contenido": 875
+  },
+  {
+    "id": 38,
+    "nombre": "Amovital",
+    "presentacion": "jarabe",
+    "contenido": 250
+  },
+  {
+    "id": 39,
+    "nombre": "Amogesic",
+    "presentacion": "tabletas",
+    "contenido": 500
+  },
+  {
+    "id": 40,
+    "nombre": "Diclofen",
+    "presentacion": "tabletas",
+    "contenido": 50
+  },
+  {
+    "id": 41,
+    "nombre": "Diclotral",
+    "presentacion": "inyecciones",
+    "contenido": 75
+  },
+  {
+    "id": 42,
+    "nombre": "Dicloderm",
+    "presentacion": "gel",
+    "contenido": 100
+  },
+  {
+    "id": 43,
+    "nombre": "Lorazina",
+    "presentacion": "tabletas",
+    "contenido": 1
+  },
+  {
+    "id": 44,
+    "nombre": "Loratadinex",
+    "presentacion": "jarabe",
+    "contenido": 10
+  },
+  {
+    "id": 45,
+    "nombre": "Loratris",
+    "presentacion": "tabletas",
+    "contenido": 5
+  }
+]
