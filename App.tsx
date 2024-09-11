@@ -7,6 +7,11 @@ import NuevoUsuario from './src/screens/NuevoUsuario';
 import HomeScreen from './src/screens/home';
 import SearchScreen from './src/screens/SearchScreen';
 import PresentationScreen from './src/screens/PresentationScreen';
+import MedicationScreen from './src/screens/MedicationScreen';
+import UnaVezAlDiaScreen from './src/screens/UnaVezAlDiaScreen';
+import AdditionalForm from './src/screens/AdditionalForm';
+import TreatmentDuration from './src/screens/TreatmentDuration';
+import DurationOfTreatment2 from './src/screens/DurationOfTreatment2';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +25,12 @@ const App = () => {
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
         <Stack.Screen name="PresentationScreen" component={PresentationScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="MedicationScreen" component={MedicationScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="UnaVezAlDiaScreen" component={UnaVezAlDiaScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="AdditionalForm" component={AdditionalForm} options={{ headerShown: false }} />
+        <Stack.Screen name="TreatmentDuration" component={TreatmentDuration} options={{ headerShown: false }} />
+        <Stack.Screen name="DurationOfTreatment2" component={DurationOfTreatment2} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

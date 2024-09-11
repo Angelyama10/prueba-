@@ -28,12 +28,18 @@ const SearchScreen = () => {
     setSearchQuery(query);
   };
 
+  // Navega a la pantalla de Medicamentos si se selecciona uno
+  const handleNavigateToMedication = (medicamento) => {
+    navigation.navigate('MedicationScreen', { medicamentoNombre: medicamento.nombre });
+  };
+  
+
   const handleNavigateToPresentation = () => {
     navigation.navigate('PresentationScreen', { medicamentoNombre: searchQuery });
   };
 
   const renderMedicamento = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('PresentationScreen', { medicamentoNombre: item.nombre })}>
+    <TouchableOpacity onPress={() => handleNavigateToMedication(item)}>
       <View style={styles.medicamentoContainer}>
         <Text style={styles.medicamentoName}>{item.nombre}</Text>
         <Text style={styles.medicamentoDetails}>{`${item.presentacion}, ${item.contenido} mg`}</Text>
@@ -45,6 +51,9 @@ const SearchScreen = () => {
     <View style={styles.container}>
       {/* Contenedor Azul */}
       <View style={styles.topContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Icon name="arrow-back" size={24} color="#ffffff" />
+        </TouchableOpacity>
         <Text style={styles.headerText}>Agrega tus medicamentos</Text>
         <Text style={styles.subHeaderText}>¿Qué medicamento quiere agregar?</Text>
 
