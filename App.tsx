@@ -12,6 +12,13 @@ import UnaVezAlDiaScreen from './src/screens/UnaVezAlDiaScreen';
 import AdditionalForm from './src/screens/AdditionalForm';
 import TreatmentDuration from './src/screens/TreatmentDuration';
 import DurationOfTreatment2 from './src/screens/DurationOfTreatment2';
+import RefillingMedications from './src/screens/RefillingMedications';
+import MedicationInstructions from './src/screens/MedicationInstructions';
+import TwiceaDay from './src/screens/TwiceaDay';
+import ThreeTimesADay from './src/screens/ThreeTimesADay';
+import MedicationProgram from './src/screens/MedicationProgram';
+
+
 
 const Stack = createStackNavigator();
 
@@ -30,6 +37,11 @@ const App = () => {
         <Stack.Screen name="AdditionalForm" component={AdditionalForm} options={{ headerShown: false }} />
         <Stack.Screen name="TreatmentDuration" component={TreatmentDuration} options={{ headerShown: false }} />
         <Stack.Screen name="DurationOfTreatment2" component={DurationOfTreatment2} options={{ headerShown: false }} />
+        <Stack.Screen name="RefillingMedications" component={RefillingMedications} options={{ headerShown: false }} />
+        <Stack.Screen name="MedicationInstructions" component={MedicationInstructions} options={{ headerShown: false }} />
+        <Stack.Screen name="TwiceaDay" component={TwiceaDay} options={{ headerShown: false }} />
+        <Stack.Screen name="ThreeTimesADay" component={ThreeTimesADay} options={{ headerShown: false }} />
+        <Stack.Screen name="MedicationProgram" component={MedicationProgram} options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>

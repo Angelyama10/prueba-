@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, Dimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useRoute } from '@react-navigation/native'; // Hook para recibir los parámetros
-import { TimePickerModal } from 'react-native-paper-dates'; // TimePicker para la selección de la hora
+import { useRoute } from '@react-navigation/native';
+import { TimePickerModal } from 'react-native-paper-dates';
+
+const { width, height } = Dimensions.get('window');
 
 const UnaVezAlDiaScreen = ({ navigation }) => {
   const route = useRoute();
-  const { medicamentoNombre } = route.params; // Extraer el nombre del medicamento desde los parámetros
-  const [visible, setVisible] = useState(false); // Controla la visibilidad del TimePicker
-  const [selectedTime, setSelectedTime] = useState("10:00 AM"); // Estado para almacenar la hora seleccionada
+  const { medicamentoNombre } = route.params;
+  const [visible, setVisible] = useState(false);
+  const [selectedTime, setSelectedTime] = useState("10:00 AM");
 
   const onConfirm = ({ hours, minutes }) => {
     const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -29,32 +31,34 @@ const UnaVezAlDiaScreen = ({ navigation }) => {
           <Text style={styles.title}>{medicamentoNombre}</Text>
         </View>
         <View style={styles.iconContainer}>
-     
-          <Ionicons name="alarm" size={65} color="white" />
+          <Ionicons name="alarm" size={width * 0.2} color="white" />
           <Text style={styles.questionText}>¿Cuándo debe tomar la dosis?</Text>
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.timePicker} onPress={() => setVisible(true)}>
-          <Text style={styles.timePickerText}>Tomar a las</Text>
-          <Text style={styles.selectedTime}>{selectedTime}</Text>
-        </TouchableOpacity>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+          <TouchableOpacity style={styles.timePicker} onPress={() => setVisible(true)}>
+            <Text style={styles.timePickerText}>Tomar a las</Text>
+            <Text style={styles.selectedTime}>{selectedTime}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('AdditionalForm', { medicamentoNombre })}
+          >
+            <Text style={styles.buttonText}>Próximo</Text>
+          </TouchableOpacity>
+        </View>
 
         <TimePickerModal
           visible={visible}
           onDismiss={() => setVisible(false)}
           onConfirm={onConfirm}
-          hours={10} // Hora por defecto
-          minutes={0} // Minutos por defecto
+          hours={10}
+          minutes={0}
           label="Selecciona la hora"
         />
-
-          <TouchableOpacity 
-            style={styles.button} 
-            onPress={() => navigation.navigate('AdditionalForm', { medicamentoNombre })}>
-            <Text style={styles.buttonText}>Próximo</Text>
-          </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -67,68 +71,70 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     backgroundColor: '#B5D6FD',
-    paddingBottom: 65,
+    paddingBottom: height * 0.05,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: '5%',
+    paddingTop: height * 0.02,
+    paddingBottom: height * 0.015,
   },
   title: {
-    fontSize: 25,
+    fontSize: width * 0.06,
     color: '#FFFFFF',
     fontWeight: 'bold',
-    marginLeft: 15,
+    marginLeft: width * 0.03,
   },
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 20,
+    paddingVertical: height * 0.02,
   },
   questionText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     color: '#FFFFFF',
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: height * 0.01,
+    paddingHorizontal: '10%',
   },
   bottomContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingTop: 45,
-    paddingHorizontal: 20,
+    paddingTop: height * 0.03,
+    paddingHorizontal: '5%',
+    paddingBottom: height * 0.02,
   },
   timePicker: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#f0f0f0',
-    padding: 15,
+    padding: height * 0.02,
     borderRadius: 10,
-    marginBottom: 30,
+    marginTop: height * 0.02,
   },
   timePickerText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     color: '#000',
   },
   selectedTime: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     color: '#1E90FF',
     fontWeight: 'bold',
   },
   button: {
     backgroundColor: '#B5D6FD',
-    paddingVertical: 15,
+    paddingVertical: height * 0.02,
     borderRadius: 25,
     alignItems: 'center',
-    marginTop: 180,
+    // marginTop: 180, // Eliminado para usar Flexbox
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: width * 0.05,
     fontWeight: 'bold',
   },
 });

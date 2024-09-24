@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native'; // Para la navegación
-import FrascoImage from '../../assets/images/frasco.png';  // Asegúrate de que la ruta sea correcta
-import medicamentos from '../../assets/mockData/medicamentos.json'; // Importación del archivo JSON
+import { useNavigation } from '@react-navigation/native';
+import FrascoImage from '../../assets/images/frasco.png';
+import medicamentos from '../../assets/mockData/medicamentos.json';
 
 const { width } = Dimensions.get('window');
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredMedicamentos, setFilteredMedicamentos] = useState([]);
-  const navigation = useNavigation(); // Hook de navegación
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (searchQuery.length >= 3) {
-      // Filtra los medicamentos cuando la consulta tiene 3 o más caracteres
       const filteredData = medicamentos.filter((medicamento) =>
         medicamento.nombre.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -28,11 +27,9 @@ const SearchScreen = () => {
     setSearchQuery(query);
   };
 
-  // Navega a la pantalla de Medicamentos si se selecciona uno
   const handleNavigateToMedication = (medicamento) => {
     navigation.navigate('MedicationScreen', { medicamentoNombre: medicamento.nombre });
   };
-  
 
   const handleNavigateToPresentation = () => {
     navigation.navigate('PresentationScreen', { medicamentoNombre: searchQuery });
@@ -51,10 +48,13 @@ const SearchScreen = () => {
     <View style={styles.container}>
       {/* Contenedor Azul */}
       <View style={styles.topContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Icon name="arrow-back" size={24} color="#ffffff" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Agrega tus medicamentos</Text>
+        {/* Ajuste para colocar el botón y el texto en la misma fila */}
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Icon name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Agrega tus medicamentos</Text>
+        </View>
         <Text style={styles.subHeaderText}>¿Qué medicamento quiere agregar?</Text>
 
         <View style={styles.searchContainer}>
@@ -70,7 +70,6 @@ const SearchScreen = () => {
 
       {/* Contenedor Blanco con bordes redondeados */}
       <View style={styles.bottomContainer}>
-        {/* Ocultar imagen cuando se empieza a buscar */}
         {filteredMedicamentos.length === 0 && searchQuery.length < 3 ? (
           <View style={styles.imageContainer}>
             <Image source={FrascoImage} style={styles.image} />
@@ -80,16 +79,14 @@ const SearchScreen = () => {
           </View>
         ) : (
           <>
-            {/* Mostrar resultados filtrados */}
             <FlatList
               data={filteredMedicamentos}
-              keyExtractor={(item) => item.id.toString()}  // Usar el id como clave
+              keyExtractor={(item) => item.id.toString()}
               renderItem={renderMedicamento}
               contentContainerStyle={styles.resultsContainer}
               ListEmptyComponent={
                 <View style={styles.noResultsContainer}>
                   <Text style={styles.noResultsText}>No se encontraron medicamentos.</Text>
-                  {/* Texto interactivo si no hay resultados */}
                   <Text style={styles.noResultsInfoText}>
                     ¿No encuentra el medicamento?
                     <TouchableOpacity onPress={handleNavigateToPresentation}>
@@ -109,24 +106,30 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF', 
+    backgroundColor: '#FFFFFF',
   },
   topContainer: {
     alignItems: 'center',
     width: '100%',
-    paddingVertical: '5%',
-    backgroundColor: '#B5D6FD', // Color azul claro
+    paddingVertical: '10%',
+    backgroundColor: '#B5D6FD',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '85%', // Ajuste para que no quede pegado a los bordes
+    marginBottom: 30,
   },
   headerText: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFFFFF',  // Texto blanco
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 10,
+    marginLeft: 15, // Espacio entre el icono y el texto
   },
   subHeaderText: {
     fontSize: 16,
-    color: '#FFFFFF',  // Texto blanco
+    color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -138,7 +141,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 8,
     marginBottom: 30,
-    elevation: 5,  // Agrega una sombra para darle un efecto flotante
+    elevation: 5,
     width: '90%',
   },
   searchInput: {
@@ -146,15 +149,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     fontSize: 16,
     marginLeft: 10,
-    color: '#000',  // Texto negro
+    color: '#000',
   },
   bottomContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',  // Fondo blanco
+    backgroundColor: '#FFFFFF',
     paddingVertical: '10%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    marginTop: -20,  // Ajuste para que se superponga ligeramente al contenedor azul
+    marginTop: -20,
   },
   imageContainer: {
     alignItems: 'center',
@@ -202,11 +205,11 @@ const styles = StyleSheet.create({
   },
   noResultsInfoText: {
     fontSize: 16,
-    color: '#000',  // Texto negro
+    color: '#000',
     textAlign: 'center',
   },
   createCustomNameText: {
-    color: '#1E90FF',  // Texto azul para el enlace
+    color: '#1E90FF',
     fontWeight: 'bold',
   },
 });

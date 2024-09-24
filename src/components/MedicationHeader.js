@@ -1,18 +1,22 @@
+// MedicationHeader.js
+
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+const { width, height } = Dimensions.get('window');
 
 const MedicationHeader = ({ navigation, title, iconName, questionText }) => {
   return (
     <View style={styles.upperSection}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="white" />
+          <Icon name="arrow-back" size={width * 0.06} color="white" />
         </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} numberOfLines={1}>{title}</Text>
       </View>
       <View style={styles.imageTextContainer}>
-        <Ionicons name={iconName} size={65} color="white" style={styles.icon} />
+        <Icon name={iconName} size={width * 0.2} color="white" />
         <Text style={styles.questionText}>{questionText}</Text>
       </View>
     </View>
@@ -22,44 +26,33 @@ const MedicationHeader = ({ navigation, title, iconName, questionText }) => {
 const styles = StyleSheet.create({
   upperSection: {
     backgroundColor: '#B5D6FD',
-    paddingBottom: 65,
+    paddingBottom: height * 0.05,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: '5%',
+    paddingTop: height * 0.02,
+    paddingBottom: height * 0.015,
   },
   title: {
-    fontSize: 25,
+    fontSize: width * 0.05,
     color: '#FFFFFF',
     fontWeight: 'bold',
-    marginLeft: 15,
+    marginLeft: width * 0.03,
+    flexShrink: 1,
   },
   imageTextContainer: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
-  icon: {
-    width: 80,
-    height: 80,
-    alignSelf: 'flex-start',
-    resizeMode: 'contain',
-    marginLeft: 30,
-    marginTop: 10,
-    marginRight: 10,
-    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: height * 0.02,
   },
   questionText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     color: '#FFFFFF',
-    textAlign: 'left',
-    marginTop: 10,
-    marginLeft: 10,
-    paddingRight: 20,
+    textAlign: 'center',
+    marginTop: height * 0.01,
+    paddingHorizontal: '10%',
   },
 });
 

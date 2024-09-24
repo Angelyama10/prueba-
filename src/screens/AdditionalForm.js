@@ -1,66 +1,66 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useRoute } from '@react-navigation/native';
-import MedicationOption from '../components/MedicationOption'; // Importamos el componente
-import SaveButton from '../components/SaveButton'; // Importamos el botón de guardar
+import MedicationOption from '../components/MedicationOption';
+import SaveButton from '../components/SaveButton';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const AdditionalForm = ({ navigation }) => {
   const route = useRoute();
   const medicamentoNombre = route.params?.medicamentoNombre || 'Medicamento, 300mg';
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Estado para controlar el botón
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.upperSection}>
         <View style={styles.header}>
-          <Icon name="arrow-back" size={24} color="white" onPress={() => navigation.goBack()} />
-          <Text style={styles.title}></Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={width * 0.06} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{medicamentoNombre}</Text>
         </View>
         <View style={styles.imageTextContainer}>
           <Image source={require('../../assets/images/pildoras.png')} style={styles.image} />
-          <Text style={styles.medicamentoText}>{medicamentoNombre}</Text>
         </View>
       </View>
 
       <View style={styles.lowerSection}>
-        <Text style={styles.instructionText}>Ya casi terminamos. ¿Le gustaría:</Text>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+          <Text style={styles.instructionText}>Ya casi terminamos. ¿Le gustaría:</Text>
 
-        {/* Opciones con íconos personalizados */}
-        <MedicationOption
-          iconName="calendar" // Ícono personalizado
-          optionText="Establecer la duración del tratamiento?"
-          onPress={() => navigation.navigate('TreatmentDuration', { medicamentoNombre })}
-        />
+          <View>
+            <MedicationOption
+              iconName="calendar"
+              optionText="Establecer la duración del tratamiento?"
+              onPress={() => navigation.navigate('TreatmentDuration', { medicamentoNombre })}
+            />
 
-        <MedicationOption
-          iconName="alarm" // Ícono personalizado
-          optionText="Establecer recordatorio de recarga?"
-          onPress={() => {
-            // Acción cuando se selecciona esta opción
-          }}
-        />
+            <MedicationOption
+              iconName="alarm"
+              optionText="Establecer recordatorio de recarga?"
+              onPress={() => navigation.navigate('RefillingMedications', { medicamentoNombre })}
+            />
 
-        <MedicationOption
-          iconName="document-text" // Ícono personalizado
-          optionText="Agregar instrucciones"
-          onPress={() => {
-            // Acción cuando se selecciona esta opción
-          }}
-        />
+            <MedicationOption
+              iconName="document-text"
+              optionText="Agregar instrucciones"
+              onPress={() => navigation.navigate('MedicationInstructions', { medicamentoNombre })}
+            />
+          </View>
 
-        {/* Botón de guardar, controlado por isButtonDisabled */}
-        <SaveButton
-          buttonText="Guardar"
-          onPress={() => {
-            // Acción del botón Guardar
-          }}
-          disabled={isButtonDisabled} // Controlamos si el botón está deshabilitado
-        />
+          {/* Botón de guardar, controlado por isButtonDisabled */}
+          <SaveButton
+            buttonText="Guardar"
+            onPress={() => {
+              // Acción del botón Guardar
+            }}
+            disabled={isButtonDisabled}
+          />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -71,52 +71,47 @@ const styles = StyleSheet.create({
   },
   upperSection: {
     backgroundColor: '#B5D6FD',
-    paddingBottom: 40,
+    paddingBottom: height * 0.05,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: '5%',
+    paddingTop: height * 0.02,
+    paddingBottom: height * 0.015,
   },
   title: {
-    fontSize: 25,
+    fontSize: width * 0.06,
     color: '#FFFFFF',
     fontWeight: 'bold',
-    marginLeft: 15,
+    marginLeft: width * 0.03,
+    flexShrink: 1,
   },
   imageTextContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 25,
+    paddingTop: height * 0.025,
   },
   image: {
-    width: 80,
-    height: 80,
+    width: width * 0.2,
+    height: width * 0.2,
     resizeMode: 'contain',
-    marginBottom: 10,
-  },
-  medicamentoText: {
-    fontSize: 25,
-    color: '#FFFFFF',
-    marginTop: 5,
-    textAlign: 'center',
+    marginBottom: height * 0.015,
   },
   lowerSection: {
     flex: 1,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingHorizontal: 25,
-    paddingTop: 30,
-    paddingBottom: 20,
+    paddingHorizontal: '5%',
+    paddingTop: height * 0.03,
+    paddingBottom: height * 0.02,
   },
   instructionText: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     color: '#6D6D6D',
     textAlign: 'center',
-    marginBottom: 25,
+    marginBottom: height * 0.025,
   },
 });
 

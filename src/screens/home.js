@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import DateComponent from '../components/DateComponent';
 import UsuarioIcon from '../../assets/images/usuario.svg';
 import NavigationBarComponent from '../components/NavigationBarComponents';
 import InfoSection from '../components/InfoSection';
+
+const { width, height } = Dimensions.get('window');
 
 const HomeScreen = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -17,7 +19,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <UsuarioIcon width={40} height={40} />
+        <UsuarioIcon width={width * 0.1} height={width * 0.1} />
         <Text style={styles.headerText}>Alonso</Text>
       </View>
       
@@ -27,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
         title="¡Cuidamos de Ti en Misalud!"
         description="Tu salud es nuestra prioridad. Comienza a registrar tu información para un mejor control y seguimiento."
         buttonText="Agregar Medicamento"
-        onButtonPress={() => navigation.navigate('Search')}  // Asegúrate de que el nombre es "Search"
+        onButtonPress={() => navigation.navigate('Search')}
       />
       <NavigationBarComponent navItems={navItems} />
     </View>
@@ -38,19 +40,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   header: {
     width: '100%',
-    paddingVertical: '7%',
-    backgroundColor: '#5A9BD3',
+    paddingVertical: height * 0.05,
+    backgroundColor: '#B5D6FD',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: '3%',
+    paddingHorizontal: '5%',
   },
   headerText: {
-    fontSize: 20,
+    fontSize: width * 0.05,
     marginLeft: '4%',
     color: '#FFFFFF',
   },

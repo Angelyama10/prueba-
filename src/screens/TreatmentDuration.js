@@ -1,96 +1,127 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, SafeAreaView, KeyboardAvoidingView } from 'react-native';
-import MedicationHeader from '../components/MedicationHeader'; // Importa tu componente de cabecera
-import MedicationOption from '../components/MedicationOption'; // Importa el componente de opciones
-import SaveButton from '../components/SaveButton'; // Importa el componente del botón de guardar
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native';
+import SaveButton from '../components/SaveButton';
 
-const DurationOfTreatment2 = ({ navigation }) => {
-  const medicamentoNombre = 'Loratadina, 300mg'; // Nombre del medicamento
+const { width, height } = Dimensions.get('window');
 
-  // Estado para controlar el campo de "Elige el número de días"
-  const [selectedDays, setSelectedDays] = useState('');
+const TreatmentDuration = ({ navigation }) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const route = useRoute();
+  const medicamentoNombre = route.params?.medicamentoNombre || 'Medicamento, 300mg';
 
-  // Función para validar si el número es válido
-  const isNumberValid = () => {
-    return selectedDays.length > 0 && !isNaN(selectedDays); // Asegura que no esté vacío y sea un número
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date.toLocaleDateString());
+    hideDatePicker();
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Usa el componente MedicationHeader */}
-      <MedicationHeader
-        navigation={navigation}
-        title={medicamentoNombre}
-        iconName="calendar"
-        questionText="¿Cuánto tiempo dura el tratamiento?"
-      />
+    <View style={styles.container}>
+      <View style={styles.upperSection}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={width * 0.06} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{medicamentoNombre}</Text>
+        </View>
+        <View style={styles.imageTextContainer}>
+          <Icon name="calendar" size={width * 0.2} color="white" />
+          <Text style={styles.instructionText}>Establecer fecha de inicio</Text>
+        </View>
+      </View>
 
-      <KeyboardAvoidingView behavior="padding" style={styles.lowerSection}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Opciones de duración */}
-          <MedicationOption optionText="5 días" onPress={() => {}} />
-          <MedicationOption optionText="1 semana" onPress={() => {}} />
-          <MedicationOption optionText="10 días" onPress={() => {}} />
-          <MedicationOption optionText="30 días" onPress={() => {}} />
+      <View style={styles.lowerSection}>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={showDatePicker} style={styles.dateContainer}>
+            <Text style={styles.selectedDateText}>
+              {selectedDate ? `Fecha seleccionada: ${selectedDate}` : 'Selecciona una fecha de inicio'}
+            </Text>
+          </TouchableOpacity>
 
-          {/* Opción de número de días personalizado */}
-          <View style={styles.customOptionContainer}>
-            <TextInput
-              style={styles.customInput}
-              placeholder="Elige el número de días"
-              keyboardType="numeric"
-              placeholderTextColor="#A0A0A0"
-              value={selectedDays}
-              onChangeText={setSelectedDays} // Actualiza el estado cada vez que el usuario escribe
-            />
-          </View>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
 
-          {/* Tratamiento en curso */}
-          <MedicationOption optionText="Tratamiento en curso" onPress={() => {}} />
-        </ScrollView>
-
-        {/* Mostrar el botón Guardar solo si el campo de días está llenado */}
-        {isNumberValid() && (
           <SaveButton
             buttonText="Guardar"
-            onPress={() => {
-              // Acción al presionar el botón de Guardar
-              console.log(`Guardando con ${selectedDays} días.`);
-            }}
+            onPress={() => navigation.navigate('DurationOfTreatment2', { medicamentoNombre })}
           />
-        )}
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </View>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#B5D6FD', // Color de fondo azul en la parte superior
+    backgroundColor: '#B5D6FD',
+  },
+  upperSection: {
+    backgroundColor: '#B5D6FD',
+    paddingBottom: height * 0.05,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: '5%',
+    paddingTop: height * 0.02,
+    paddingBottom: height * 0.015,
+  },
+  title: {
+    fontSize: width * 0.05,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    marginLeft: width * 0.03,
+  },
+  imageTextContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: height * 0.02,
+  },
+  instructionText: {
+    fontSize: width * 0.045,
+    color: '#FFFFFF',
+    marginTop: height * 0.01,
+    textAlign: 'center',
+    paddingHorizontal: '10%',
   },
   lowerSection: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // Color de fondo blanco en la parte inferior
-    borderTopLeftRadius: 30, // Bordes redondeados en la parte superior
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingHorizontal: 25,
-    paddingTop: 30,
-    paddingBottom: 20,
+    paddingHorizontal: '5%',
+    paddingTop: height * 0.03,
+    paddingBottom: height * 0.02,
   },
-  scrollContent: {
-    paddingBottom: 20,
+  dateContainer: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    paddingVertical: height * 0.02,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: height * 0.02,
+    marginBottom: height * 0.03,
   },
-  customOptionContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
-    paddingVertical: 25,
-    marginBottom: 25,
-  },
-  customInput: {
-    fontSize: 16,
+  selectedDateText: {
+    fontSize: width * 0.045,
     color: '#333',
   },
 });
 
-export default DurationOfTreatment2;
+export default TreatmentDuration;
