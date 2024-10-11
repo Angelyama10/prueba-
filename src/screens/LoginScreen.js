@@ -1,168 +1,201 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-const { width } = Dimensions.get('window');
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient'; // Importa el componente para el degradado
 
+const { width, height } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.topContainer}>
-        <Text style={styles.welcomeText}>Bienvenidos</Text>
-        <Image source={require('../../assets/images/Login.jpg')} style={styles.loginImage} />
-        <Text style={styles.loginText}>Iniciar sesión</Text>
-      </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      {/* Fondo con degradado */}
+      <LinearGradient
+        colors={['#B5D6FD', '#FFFFFF']}
+        style={styles.background}
+      >
+        {/* Elemento decorativo superior */}
+        <View style={styles.topDecoration} />
 
-      <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>NOMBRE</Text>
-          <TextInput style={styles.input} placeholder="Nombre" />
-        </View>
-        
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>PASSWORD</Text>
-          <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+        <View style={styles.contentContainer}>
+          <View style={styles.topContainer}>
+            <Text style={styles.welcomeText}>Bienvenido</Text>
+            <Image
+              source={require('../../assets/images/Login.jpg')}
+              style={styles.loginImage}
+            />
+          </View>
+
+          <View style={styles.formContainer}>
+            <Text style={styles.loginText}>Iniciar sesión</Text>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Nombre de usuario"
+                placeholderTextColor="#888"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Contraseña"
+                placeholderTextColor="#888"
+                secureTextEntry
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => navigation.navigate('Home')}
+            >
+              <Text style={styles.loginButtonText}>Entrar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                // Navegar a la pantalla de recuperación de contraseña
+              }}
+            >
+              <Text style={styles.forgotPasswordText}>Recuperar contraseña</Text>
+            </TouchableOpacity>
+
+            <View style={styles.registerContainer}>
+              <Text style={styles.noAccountText}>¿No tienes una cuenta?</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Nuevo')}
+              >
+                <Text style={styles.registerText}>Regístrate</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.loginButtonText}>Entrar</Text>
-        </TouchableOpacity>
-        <View style={styles.linksContainer}>
-          <TouchableOpacity>
-            <Text style={styles.forgotPasswordText}>¿Has olvidado tu contraseña?</Text>
-            <Text style={styles.resetPasswordText}>Recuperar contraseña</Text>
-          </TouchableOpacity>
-        </View>
-        
-        <TouchableOpacity>
-          <Text style={styles.UsuarioText}>¿No tienes usuario?</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.registerButton} 
-          onPress={() => navigation.navigate('Nuevo')} 
-        >
-          <Text style={styles.registerButtonText}>Regístrate</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        {/* Elemento decorativo inferior */}
+        <View style={styles.bottomDecoration} />
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: '#FFFFFF', 
-    alignItems: 'center',
+    flex: 1,
+  },
+  background: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
     justifyContent: 'center',
+  },
+  topDecoration: {
+    position: 'absolute',
+    top: -height * 0.1,
+    left: -width * 0.3,
+    width: width * 1,
+    height: width * 1,
+    backgroundColor: '#5A9BD3',
+    borderRadius: width * 0.5,
+    opacity: 0.2,
+  },
+  bottomDecoration: {
+    position: 'absolute',
+    bottom: -height * 0.1,
+    right: -width * 0.3,
+    width: width * 1,
+    height: width * 1,
+    backgroundColor: '#5A9BD3',
+    borderRadius: width * 0.5,
+    opacity: 0.2,
   },
   topContainer: {
     alignItems: 'center',
-    width: '100%',
-    paddingVertical: '5%', 
-    backgroundColor: '#FFFFFF',
+    marginBottom: height * 0.02,
   },
   welcomeText: {
-    fontSize: width * 0.07, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'YanoneKaffeesatz-Regular',
-    marginTop: '5%', 
-    marginBottom: '2%',
+    fontSize: width * 0.08,
+    fontWeight: 'bold',
     color: '#000000',
-    textAlign: 'center', 
+    marginBottom: height * 0.015,
   },
   loginImage: {
-    width: '50%', 
-    height: undefined, 
-    aspectRatio: 1, 
+    width: width * 0.4,
+    height: width * 0.4,
     resizeMode: 'contain',
-    marginBottom: '5%',
-  },
-  loginText: {
-    fontSize: width * 0.06, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'Poppins-Regular',
-    marginBottom: '5%',
-    color: '#000000',
   },
   formContainer: {
-    width: '100%',
-    backgroundColor: '#B5D6FD', 
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: '10%', 
-    paddingVertical: '5%',
+    paddingHorizontal: '8%',
     alignItems: 'center',
+    marginTop: height * 0.02,
+  },
+  loginText: {
+    fontSize: width * 0.06,
+    color: '#000000',
+    marginBottom: height * 0.02,
+    fontWeight: 'bold',
   },
   inputContainer: {
     width: '100%',
-    marginBottom: '5%',
-  },
-  labelText: {
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'DMSans_18pt-Regular',
-    marginBottom: '2%',
-    color: '#000000',
+    marginBottom: height * 0.015,
   },
   input: {
-    height: 50, 
+    width: '100%',
+    height: height * 0.06,
     borderColor: '#ccc',
     borderWidth: 1,
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: width * 0.02,
+    paddingHorizontal: width * 0.04,
     backgroundColor: '#FFFFFF',
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    width: '100%',
+    fontSize: width * 0.045,
+    color: '#000',
   },
   loginButton: {
-    width: '55%', 
-    height: 50, 
-    backgroundColor: '#28a745',
+    width: '100%',
+    height: height * 0.065,
+    backgroundColor: '#5A9BD3',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '5%', 
-    marginBottom: '5%', 
-    borderRadius: 10,
-  },  
+    borderRadius: width * 0.02,
+    marginTop: height * 0.015,
+  },
   loginButtonText: {
     color: '#FFFFFF',
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'DMSans_18pt-Regular',
-  },
-  linksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginTop: '2%', 
+    fontSize: width * 0.05,
+    fontWeight: 'bold',
   },
   forgotPasswordText: {
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'DMSans_18pt-Regular',
-    color: '#000000',
+    fontSize: width * 0.04,
+    color: '#5A9BD3',
+    marginTop: height * 0.015,
+    textDecorationLine: 'underline',
   },
-  UsuarioText: {
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'DMSans_18pt-Regular',
-    marginBottom: 5,
-    color: '#000000',
-    textAlign: 'center',  
-  },
-  resetPasswordText: {
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'DMSans_18pt-Regular',
-    color: '#1E90FF',
-    marginBottom: 20,
-  },
-  registerButton: {
-    backgroundColor: '#5A9BD3',
-    paddingVertical: 15, 
-    paddingHorizontal: 20, 
-    borderRadius: 10,
-    width: '100%', 
+  registerContainer: {
+    flexDirection: 'row',
+    marginTop: height * 0.025,
     alignItems: 'center',
-    marginTop: '5%',
   },
-  registerButtonText: {
-    color: '#FFFFFF',
-    fontSize: width * 0.045, // Escalando tamaño de fuente con el ancho de la pantalla
-    fontFamily: 'DMSans_18pt-Regular',
+  noAccountText: {
+    fontSize: width * 0.042,
+    color: '#000',
+  },
+  registerText: {
+    fontSize: width * 0.042,
+    color: '#5A9BD3',
+    marginLeft: width * 0.01,
+    textDecorationLine: 'underline',
   },
 });
 

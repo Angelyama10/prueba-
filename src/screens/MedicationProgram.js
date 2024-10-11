@@ -87,7 +87,7 @@ const MedicationProgram = ({ navigation }) => {
             {isVariosActive && (
               <View style={styles.innerOptionContainer}>
                 <NumberSelector
-                  label="¿Cuántas veces al día?"
+                  label="tas veces al día?"
                   value={vecesAlDia}
                   onChangeValue={setVecesAlDia}
                   min={1}

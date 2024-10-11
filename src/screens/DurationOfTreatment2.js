@@ -40,7 +40,7 @@ const DurationOfTreatment2 = ({ navigation }) => {
         </View>
         <View style={styles.imageTextContainer}>
           <Icon name="calendar" size={width * 0.2} color="white" />
-          <Text style={styles.questionText}>¿Cuánto tiempo dura el tratamiento?</Text>
+          <Text style={styles.questionText}>¿Cunáto tiempo dura el tratamiento?</Text>
         </View>
       </View>
 

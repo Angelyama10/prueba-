@@ -4,7 +4,11 @@ import { View, Text, StyleSheet } from 'react-native';
 const DateComponent = () => {
   const today = new Date();
 
-  const displayDate = `Hoy, ${today.getDate()} ${today.toLocaleDateString('es-ES', { month: 'short' })}`;
+  const dayName = today.toLocaleDateString('es-ES', { weekday: 'long' });
+  const dayNumber = today.getDate();
+  const monthName = today.toLocaleDateString('es-ES', { month: 'long' });
+
+  const displayDate = `${dayName.charAt(0).toUpperCase() + dayName.slice(1)}, ${dayNumber} de ${monthName}`;
 
   return (
     <View style={styles.dateDisplayContainer}>
@@ -15,16 +19,21 @@ const DateComponent = () => {
 
 const styles = StyleSheet.create({
   dateDisplayContainer: {
-    width: '100%',
-    paddingVertical: '3%',
-    paddingHorizontal: '5%', // Añade márgenes horizontales
-    alignItems: 'flex-start', // Alinea el contenido a la izquierda
-    backgroundColor: '#EDF3FF',
+    width: '70%', // Ajusta el ancho según tus necesidades
+    paddingVertical: '4%',
+    paddingHorizontal: '5%',
+    alignItems: 'flex-start',
+    backgroundColor: '#F0F4FA',
+    borderTopRightRadius: 25, // Redondea la esquina superior derecha
+    borderBottomRightRadius: 25, // Redondea la esquina inferior derecha
   },
   dateText: {
-    fontSize: 20,
-    color: '#000',
+    fontSize: 22,
+    color: '#333333',
+    fontWeight: 'bold',
   },
 });
+
+
 
 export default DateComponent;

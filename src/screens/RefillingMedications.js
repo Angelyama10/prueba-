@@ -25,7 +25,7 @@ const RefillingMedications = ({ navigation }) => {
         <View style={styles.imageTextContainer}>
           <Icon name="medkit" size={width * 0.2} color="white" />
           <Text style={styles.instructionText}>
-            ¿Cuántas medicinas quieres que queden antes de recibir un recordatorio de recarga?
+            tas medicinas quieres que queden antes de recibir un recordatorio de recarga?
           </Text>
         </View>
       </View>

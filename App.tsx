@@ -17,6 +17,8 @@ import MedicationInstructions from './src/screens/MedicationInstructions';
 import TwiceaDay from './src/screens/TwiceaDay';
 import ThreeTimesADay from './src/screens/ThreeTimesADay';
 import MedicationProgram from './src/screens/MedicationProgram';
+import MoreOptionsModal from './src/screens/MoreOptionsModal';
+import AgendaScreen from './src/screens/AgendaScreen';
 
 
 
@@ -42,6 +44,8 @@ const App = () => {
         <Stack.Screen name="TwiceaDay" component={TwiceaDay} options={{ headerShown: false }} />
         <Stack.Screen name="ThreeTimesADay" component={ThreeTimesADay} options={{ headerShown: false }} />
         <Stack.Screen name="MedicationProgram" component={MedicationProgram} options={{ headerShown: false }} />
+        <Stack.Screen name="MoreOptionsModal" component={MoreOptionsModal} options={{ headerShown: false }} />
+        <Stack.Screen name="AgendaScreen" component={AgendaScreen} options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>

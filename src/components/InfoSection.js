@@ -9,7 +9,7 @@ const InfoSection = ({
   onButtonPress 
 }) => {
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={imageSource} style={styles.loginImage} />
       </View>
@@ -27,49 +27,53 @@ const InfoSection = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: '5%',
+  },
   imageContainer: {
-    marginVertical: '-3%',
     alignItems: 'center',
+    marginBottom: '5%',
   },
   loginImage: {
-    width: '75%',
+    width: '80%',
     height: undefined,
     aspectRatio: 1, 
     resizeMode: 'contain',
   },
-    infoContainer: {
-      alignItems: 'center',
-      marginHorizontal: '8%',
-      marginBottom: '8%',
-    },
-    infoTitle: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 15,
-      color: '#000000',  // Negro en hexadecimal
-    },
-    infoText: {
-      fontSize: 18,
-      textAlign: 'center',
-      marginVertical: 8,
-      lineHeight: 24,
-      color: '#000000',  // Negro en hexadecimal
-    },
-  
+  infoContainer: {
+    alignItems: 'center',
+    marginBottom: '5%',
+  },
+  infoTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+    color: '#333333',
+  },
+  infoText: {
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+    color: '#666666',
+  },
   button: {
     backgroundColor: '#5A9BD3',
     paddingVertical: '4%',
-    paddingHorizontal: '10%',
-    borderRadius: 20,
-    width: '70%',
+    borderRadius: 25,
+    width: '80%',
     alignSelf: 'center',
-    marginBottom: '5%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
   },
   buttonText: {
     color: '#FFFFFF',
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

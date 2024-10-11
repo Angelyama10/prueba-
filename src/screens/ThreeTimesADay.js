@@ -51,7 +51,7 @@ const ThreeTimesADay = ({ navigation }) => {
         navigation={navigation}
         title={medicamentoNombre}
         iconName="alarm-outline"
-        questionText="¿Cuándo quieres que te lo recuerden?"
+        questionText="do quieres que te lo recuerden?"
       />
 
       <View style={styles.lowerSection}>

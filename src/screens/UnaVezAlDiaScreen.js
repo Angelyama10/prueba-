@@ -32,7 +32,7 @@ const UnaVezAlDiaScreen = ({ navigation }) => {
         </View>
         <View style={styles.iconContainer}>
           <Ionicons name="alarm" size={width * 0.2} color="white" />
-          <Text style={styles.questionText}>¿Cuándo debe tomar la dosis?</Text>
+          <Text style={styles.questionText}>do debe tomar la dosis?</Text>
         </View>
       </View>
 
