@@ -19,33 +19,45 @@ import ThreeTimesADay from './src/screens/ThreeTimesADay';
 import MedicationProgram from './src/screens/MedicationProgram';
 import MoreOptionsModal from './src/screens/MoreOptionsModal';
 import AgendaScreen from './src/screens/AgendaScreen';
-
-
+import Medicines from './src/screens/Medicines';
+import Progress from './src/screens/Progress';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Nuevo" component={NuevoUsuario} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="PresentationScreen" component={PresentationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MedicationScreen" component={MedicationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="UnaVezAlDiaScreen" component={UnaVezAlDiaScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="AdditionalForm" component={AdditionalForm} options={{ headerShown: false }} />
-        <Stack.Screen name="TreatmentDuration" component={TreatmentDuration} options={{ headerShown: false }} />
-        <Stack.Screen name="DurationOfTreatment2" component={DurationOfTreatment2} options={{ headerShown: false }} />
-        <Stack.Screen name="RefillingMedications" component={RefillingMedications} options={{ headerShown: false }} />
-        <Stack.Screen name="MedicationInstructions" component={MedicationInstructions} options={{ headerShown: false }} />
-        <Stack.Screen name="TwiceaDay" component={TwiceaDay} options={{ headerShown: false }} />
-        <Stack.Screen name="ThreeTimesADay" component={ThreeTimesADay} options={{ headerShown: false }} />
-        <Stack.Screen name="MedicationProgram" component={MedicationProgram} options={{ headerShown: false }} />
-        <Stack.Screen name="MoreOptionsModal" component={MoreOptionsModal} options={{ headerShown: false }} />
-        <Stack.Screen name="AgendaScreen" component={AgendaScreen} options={{ headerShown: false }} />
+      <Stack.Navigator
+        initialRouteName="Splash"
+        screenOptions={{
+          cardStyleInterpolator: ({ current }) => ({
+            cardStyle: {
+              opacity: current.progress,
+            },
+          }),
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Nuevo" component={NuevoUsuario} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="PresentationScreen" component={PresentationScreen} />
+        <Stack.Screen name="MedicationScreen" component={MedicationScreen} />
+        <Stack.Screen name="UnaVezAlDiaScreen" component={UnaVezAlDiaScreen} />
+        <Stack.Screen name="AdditionalForm" component={AdditionalForm} />
+        <Stack.Screen name="TreatmentDuration" component={TreatmentDuration} />
+        <Stack.Screen name="DurationOfTreatment2" component={DurationOfTreatment2} />
+        <Stack.Screen name="RefillingMedications" component={RefillingMedications} />
+        <Stack.Screen name="MedicationInstructions" component={MedicationInstructions} />
+        <Stack.Screen name="TwiceaDay" component={TwiceaDay} />
+        <Stack.Screen name="ThreeTimesADay" component={ThreeTimesADay} />
+        <Stack.Screen name="MedicationProgram" component={MedicationProgram} />
+        <Stack.Screen name="MoreOptionsModal" component={MoreOptionsModal} />
+        <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
+        <Stack.Screen name="Medicines" component={Medicines} />
+        <Stack.Screen name="Progress" component={Progress} />
 
       </Stack.Navigator>
     </NavigationContainer>

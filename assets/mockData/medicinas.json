@@ -1,0 +1,17 @@
+{
+    "medicamentos": [
+      {
+        "nombre": "Paracetamol",
+        "hora": "10:00",
+        "frecuencia": "Cada 8 horas",
+        "pastillas_restantes": 15
+      },
+      {
+        "nombre": "Amoxicilina",
+        "hora": "08:00 y 20:00",
+        "frecuencia": "Cada 12 horas",
+        "pastillas_restantes": 7
+      }
+      
+    ]
+  }

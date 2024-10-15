@@ -19,8 +19,8 @@ const DateComponent = () => {
 
 const styles = StyleSheet.create({
   dateDisplayContainer: {
-    width: '70%', // Ajusta el ancho según tus necesidades
-    paddingVertical: '4%',
+    width: '60%', // Ajusta el ancho según tus necesidades
+    paddingVertical: '2%',
     paddingHorizontal: '5%',
     alignItems: 'flex-start',
     backgroundColor: '#F0F4FA',
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 25, // Redondea la esquina inferior derecha
   },
   dateText: {
-    fontSize: 22,
+    fontSize: 20,
     color: '#333333',
     fontWeight: 'bold',
   },

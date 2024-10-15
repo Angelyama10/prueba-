@@ -1,27 +1,21 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const InfoSection = ({ 
-  imageSource, 
-  title, 
-  description, 
-  buttonText, 
-  onButtonPress 
-}) => {
+const InfoSection = ({ icon, imageSource, title, description, buttonText, onButtonPress, showButton = true }) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={imageSource} style={styles.loginImage} />
+        {icon ? icon : <Image source={imageSource} style={styles.loginImage} />}
       </View>
-      
       <View style={styles.infoContainer}>
         <Text style={styles.infoTitle}>{title}</Text>
         <Text style={styles.infoText}>{description}</Text>
       </View>
-      
-      <TouchableOpacity style={styles.button} onPress={onButtonPress}>
-        <Text style={styles.buttonText}>{buttonText}</Text>
-      </TouchableOpacity>
+      {showButton && (
+        <TouchableOpacity style={styles.button} onPress={onButtonPress}>
+          <Text style={styles.buttonText}>{buttonText}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -35,9 +29,9 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   loginImage: {
-    width: '80%',
+    width: '70%',
     height: undefined,
-    aspectRatio: 1, 
+    aspectRatio: 1,
     resizeMode: 'contain',
   },
   infoContainer: {
@@ -45,7 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   infoTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
@@ -68,6 +62,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 5,
+    marginTop: 2, // Añade margen superior al botón
   },
   buttonText: {
     color: '#FFFFFF',

@@ -28,9 +28,8 @@ const DurationOfTreatment2 = ({ navigation }) => {
     return selectedDays.length > 0 && !isNaN(selectedDays);
   };
 
-  return (
+   return (
     <SafeAreaView style={styles.container}>
-      {/* Encabezado con el nombre del medicamento */}
       <View style={styles.upperSection}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -40,17 +39,17 @@ const DurationOfTreatment2 = ({ navigation }) => {
         </View>
         <View style={styles.imageTextContainer}>
           <Icon name="calendar" size={width * 0.2} color="white" />
-          <Text style={styles.questionText}>¿Cunáto tiempo dura el tratamiento?</Text>
+          <Text style={styles.questionText}>¿Cuánto tiempo dura el tratamiento?</Text>
         </View>
       </View>
 
       <KeyboardAvoidingView behavior="padding" style={styles.lowerSection}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Opciones de duración */}
-          <MedicationOption optionText="5 días" onPress={() => {}} />
-          <MedicationOption optionText="1 semana" onPress={() => {}} />
-          <MedicationOption optionText="10 días" onPress={() => {}} />
-          <MedicationOption optionText="30 días" onPress={() => {}} />
+          <MedicationOption optionText="5 días" onPress={() => handleSave('5 días')} />
+          <MedicationOption optionText="1 semana" onPress={() => handleSave('1 semana')} />
+          <MedicationOption optionText="10 días" onPress={() => handleSave('10 días')} />
+          <MedicationOption optionText="30 días" onPress={() => handleSave('30 días')} />
 
           {/* Opción de número de días personalizado */}
           <View style={styles.customOptionContainer}>
@@ -60,22 +59,22 @@ const DurationOfTreatment2 = ({ navigation }) => {
               keyboardType="numeric"
               placeholderTextColor="#A0A0A0"
               value={selectedDays}
-              onChangeText={setSelectedDays}
+              onChangeText={(text) => {
+                setSelectedDays(text);
+                setCustomDurationSelected(true); // Marca que una duración personalizada fue seleccionada
+              }}
             />
           </View>
 
           {/* Tratamiento en curso */}
-          <MedicationOption optionText="Tratamiento en curso" onPress={() => {}} />
+          <MedicationOption optionText="Tratamiento en curso" onPress={() => handleSave('Tratamiento en curso')} />
         </ScrollView>
 
-        {/* Mostrar el botón Guardar solo si el campo de días es válido */}
-        {isNumberValid() && (
+        {/* Mostrar el botón Guardar si se seleccionó un número de días personalizado */}
+        {(isNumberValid() || customDurationSelected) && (
           <SaveButton
             buttonText="Guardar"
-            onPress={() => {
-              // Acción al presionar el botón de Guardar
-              console.log(`Guardando con ${selectedDays} días.`);
-            }}
+            onPress={() => handleSave(selectedDays || 'Duración personalizada')}
           />
         )}
       </KeyboardAvoidingView>

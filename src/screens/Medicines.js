@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import DateComponent from '../components/DateComponent';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import NavigationBarComponent from '../components/NavigationBarComponents';
 import InfoSection from '../components/InfoSection';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHouseMedicalCircleXmark, faUser } from '@fortawesome/free-solid-svg-icons'; // Agregar ícono de usuario
 
 const { width, height } = Dimensions.get('window');
 
-const HomeScreen = ({ navigation }) => {
+const Medicines = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const navItems = [
     { text: 'Inicio', iconName: 'home-heart', onPress: () => navigation.navigate('Home') },
     { text: 'Progreso', iconName: 'chart-bar', onPress: () => navigation.navigate('Progress') },
-    { text: 'Medicamentos', iconName: 'pill', onPress: () => navigation.navigate('Medicines') },
+    { text: 'Medicamentos', iconName: 'pill', onPress: () => console.log('Medicamentos presionado') },
     { text: 'Más', iconName: 'dots-horizontal', onPress: () => console.log('Más presionado') },
   ];
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Icon name="account-circle" size={width * 0.1} color="#FFFFFF" />
-        <Text style={styles.headerText}>Alonso Inicio </Text>
+        {/* Asegurarse de que el ícono esté en un contenedor separado y el texto esté en un <Text> */}
+        <FontAwesomeIcon icon={faUser} size={24} color="#FFFFFF" />
+        <Text style={styles.headerText}>Alonso</Text>
       </View>
-
       <ScrollView contentContainerStyle={styles.content}>
-        <DateComponent selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        <InfoSection 
-          imageSource={require('../../assets/images/calendario.jpg')}
-          title="¡Cuidamos de Ti en Misalud!"
-          description="Tu salud es nuestra prioridad. Comienza a registrar tu información para un mejor control y seguimiento."
+        <InfoSection
+          icon={<FontAwesomeIcon icon={faHouseMedicalCircleXmark} size={110} color="#5A9BD3" />}
+          title="Empecemos"
+          description="Agrega recordatorios para sus medicamentos, siga sus existencias y mucho más."
           buttonText="Agregar Medicamento"
           onButtonPress={() => navigation.navigate('Search')}
         />
@@ -59,8 +59,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   content: {
-    paddingBottom: 100, // Espacio para la barra de navegación
+    paddingBottom: 80, // Espacio para la barra de navegación
+    marginTop: 20,
   },
 });
 
-export default HomeScreen;
+export default Medicines;

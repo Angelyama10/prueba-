@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-native-fontawesome": "^0.3.2",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-picker/picker": "^2.8.0",
     "@react-native-vector-icons/material-icons": "^0.0.1-alpha.25",

@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
-import DateComponent from '../components/DateComponent';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import NavigationBarComponent from '../components/NavigationBarComponents';
 import InfoSection from '../components/InfoSection';
 
 const { width, height } = Dimensions.get('window');
 
-const HomeScreen = ({ navigation }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+const Progress = ({ navigation }) => {
   const navItems = [
     { text: 'Inicio', iconName: 'home-heart', onPress: () => navigation.navigate('Home') },
     { text: 'Progreso', iconName: 'chart-bar', onPress: () => navigation.navigate('Progress') },
@@ -19,18 +16,15 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Icon name="account-circle" size={width * 0.1} color="#FFFFFF" />
-        <Text style={styles.headerText}>Alonso Inicio </Text>
+        <Text style={styles.headerText}>Progreso</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
-        <DateComponent selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         <InfoSection 
           imageSource={require('../../assets/images/calendario.jpg')}
-          title="¡Cuidamos de Ti en Misalud!"
-          description="Tu salud es nuestra prioridad. Comienza a registrar tu información para un mejor control y seguimiento."
-          buttonText="Agregar Medicamento"
-          onButtonPress={() => navigation.navigate('Search')}
+          title="Revisa tu progreso"
+          description="Encontrarás tus entradas anteriores aquí después de confirmar tus primeros recordatorios."
+          showButton={false}
         />
       </ScrollView>
       <NavigationBarComponent navItems={navItems} navigation={navigation} />
@@ -42,7 +36,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    position: 'relative', // Permite el posicionamiento absoluto de la barra de navegación
+    position: 'relative',
   },
   header: {
     width: '100%',
@@ -59,8 +53,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   content: {
-    paddingBottom: 100, // Espacio para la barra de navegación
+    paddingBottom: 80,
   },
 });
 
-export default HomeScreen;
+export default Progress;

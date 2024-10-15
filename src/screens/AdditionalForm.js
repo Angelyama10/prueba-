@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get('window');
 const AdditionalForm = ({ navigation }) => {
   const route = useRoute();
   const medicamentoNombre = route.params?.medicamentoNombre || 'Medicamento, 300mg';
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Botón de guardar habilitado
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,15 +31,17 @@ const AdditionalForm = ({ navigation }) => {
           <Text style={styles.instructionText}>Ya casi terminamos. ¿Le gustaría:</Text>
 
           <View>
+            {/* Opción con el icono verde al lado */}
             <MedicationOption
               iconName="calendar"
-              optionText="Establecer la duración del tratamiento?"
+              optionText="Establecer la duración del tratamiento"
               onPress={() => navigation.navigate('TreatmentDuration', { medicamentoNombre })}
+              rightIcon={<Icon name="checkmark-circle-outline" size={24} color="green" />} // Icono verde añadido
             />
 
             <MedicationOption
               iconName="alarm"
-              optionText="Establecer recordatorio de recarga?"
+              optionText="Establecer recordatorio de recarga"
               onPress={() => navigation.navigate('RefillingMedications', { medicamentoNombre })}
             />
 
@@ -50,11 +52,12 @@ const AdditionalForm = ({ navigation }) => {
             />
           </View>
 
-          {/* Botón de guardar, controlado por isButtonDisabled */}
+          {/* Botón de guardar */}
           <SaveButton
             buttonText="Guardar"
             onPress={() => {
               // Acción del botón Guardar
+              navigation.navigate('FinalScreen', { medicamentoNombre });
             }}
             disabled={isButtonDisabled}
           />
