@@ -8,9 +8,9 @@
       },
       {
         "nombre": "Amoxicilina",
-        "hora": "08:00 y 20:00",
+        "hora": "09:00 y 20:00",
         "frecuencia": "Cada 12 horas",
-        "pastillas_restantes": 7
+        "pastillas_restantes": 9
       }
       
     ]

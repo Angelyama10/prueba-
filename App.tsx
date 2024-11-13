@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './src/screens/SplashScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import NuevoUsuario from './src/screens/NuevoUsuario';
-import HomeScreen from './src/screens/home';
+import HomeScreen from './src/screens/HomeScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import PresentationScreen from './src/screens/PresentationScreen';
 import MedicationScreen from './src/screens/MedicationScreen';
@@ -20,11 +20,33 @@ import MedicationProgram from './src/screens/MedicationProgram';
 import MoreOptionsModal from './src/screens/MoreOptionsModal';
 import AgendaScreen from './src/screens/AgendaScreen';
 import Medicines from './src/screens/Medicines';
+import HomeDatos from './src/screens/HomeDatos';
+import ReminderSettings from './src/screens/ReminderSettings';
+import DailyReminderSettings from './src/screens/DailyReminderSettings';
+import DailyMultipleReminders from './src/screens/DailyMultipleReminders';
 import Progress from './src/screens/Progress';
+import EditMedicationScreen from './src/screens/EditMedicationScreen';
+
+import AppointmentScreen from './src/screens/AppointmentScreen';
+import AddDoctorScreen from './src/screens/AddDoctorScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 
+const clearStorage = async () => {
+  try {
+    await AsyncStorage.clear();
+    console.log('AsyncStorage limpiado');
+  } catch (error) {
+    console.error('Error limpiando AsyncStorage:', error);
+  }
+};
+
 const App = () => {
+  useEffect(() => {
+    clearStorage();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -54,11 +76,19 @@ const App = () => {
         <Stack.Screen name="TwiceaDay" component={TwiceaDay} />
         <Stack.Screen name="ThreeTimesADay" component={ThreeTimesADay} />
         <Stack.Screen name="MedicationProgram" component={MedicationProgram} />
-        <Stack.Screen name="MoreOptionsModal" component={MoreOptionsModal} />
+        <Stack.Screen name="MoreOptionsModal" component={MoreOptionsModal}/>
         <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
         <Stack.Screen name="Medicines" component={Medicines} />
         <Stack.Screen name="Progress" component={Progress} />
+        <Stack.Screen name="HomeDatos" component={HomeDatos} />
+        <Stack.Screen name="DailyReminderSettings" component={DailyReminderSettings} />
+        <Stack.Screen name="DailyMultipleReminders" component={DailyMultipleReminders} />
+        <Stack.Screen name="EditMedicationScreen" component={EditMedicationScreen} />
 
+        <Stack.Screen name="ReminderSettings" component={ReminderSettings} />
+        <Stack.Screen name="AppointmentScreen" component={AppointmentScreen} />
+        <Stack.Screen name="AddDoctorScreen" component={AddDoctorScreen} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

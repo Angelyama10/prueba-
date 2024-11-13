@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,22 +10,64 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient'; // Importa el componente para el degradado
+import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+import { auth } from '../services/auth.service';
+import ErrorModal from '../components/ErrorModal';
+import { LogBox } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
+LogBox.ignoreAllLogs();
 
 const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [contraseña, setContraseña] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      if (!email || !contraseña) {
+        setErrorMessage('Por favor, ingresa el correo y la contraseña');
+        setErrorVisible(true);
+        return;
+      }
+
+      const dataUser = { email, contraseña };
+      console.log("Datos de autenticación enviados:", dataUser);
+
+      const response = await auth(dataUser);
+
+      if (response?.access_token) {
+        console.log("Token recibido:", response.access_token);
+
+        // Guardar el token en AsyncStorage
+        await AsyncStorage.setItem('userToken', response.access_token);
+
+        navigation.navigate('Home');
+      } else {
+        setErrorMessage('Usuario o contraseña incorrectos. Intenta de nuevo o restablece tu contraseña.');
+        setErrorVisible(true);
+      }
+    } catch (error) {
+      const errorMsg = error.message.includes('Error en autenticación') ?
+        'Usuario o contraseña incorrectos. Intenta de nuevo o restablece tu contraseña.' :
+        'Hubo un problema al iniciar sesión. Por favor, intenta de nuevo.';
+      setErrorMessage(errorMsg);
+      setErrorVisible(true);
+      console.error("Error en login:", error);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      {/* Fondo con degradado */}
       <LinearGradient
         colors={['#B5D6FD', '#FFFFFF']}
         style={styles.background}
       >
-        {/* Elemento decorativo superior */}
         <View style={styles.topDecoration} />
 
         <View style={styles.contentContainer}>
@@ -43,8 +85,10 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="Nombre de usuario"
+                placeholder="Correo electrónico"
                 placeholderTextColor="#888"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -54,12 +98,14 @@ const LoginScreen = ({ navigation }) => {
                 placeholder="Contraseña"
                 placeholderTextColor="#888"
                 secureTextEntry
+                value={contraseña}
+                onChangeText={setContraseña}
               />
             </View>
 
             <TouchableOpacity
               style={styles.loginButton}
-              onPress={() => navigation.navigate('Home')}
+              onPress={handleLogin}
             >
               <Text style={styles.loginButtonText}>Entrar</Text>
             </TouchableOpacity>
@@ -83,13 +129,17 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Elemento decorativo inferior */}
         <View style={styles.bottomDecoration} />
+
+        <ErrorModal
+          visible={errorVisible}
+          message={errorMessage}
+          onClose={() => setErrorVisible(false)}
+        />
       </LinearGradient>
     </KeyboardAvoidingView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

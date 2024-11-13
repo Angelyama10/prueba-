@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import FrascoImage from '../../assets/images/frasco.png';
 import medicamentos from '../../assets/mockData/medicamentos.json';
 
@@ -27,7 +28,34 @@ const SearchScreen = () => {
     setSearchQuery(query);
   };
 
+  // Función para guardar en AsyncStorage con dosis inicializado
+  const handleSaveToStorage = async (medicamento) => {
+    try {
+      const { id, ...medicamentoSinId } = medicamento;
+      const storedData = await AsyncStorage.getItem('selectedMedicamentos');
+      const parsedData = storedData ? JSON.parse(storedData) : [];
+
+      // Crear el medicamento con dosis inicializado
+      const medicamentoConDosis = {
+        ...medicamentoSinId,
+        dosis: [],  // Inicializamos el array de dosis vacío
+        numero_dosis: 0,  // Valor inicial para número de dosis
+        frecuencia: '',    // Valor inicial para frecuencia
+      };
+
+      // Agregar el medicamento seleccionado, evitando duplicados
+      const updatedData = parsedData.filter(m => m.nombre !== medicamentoConDosis.nombre);
+      updatedData.push(medicamentoConDosis);
+
+      await AsyncStorage.setItem('selectedMedicamentos', JSON.stringify(updatedData));
+      console.log('Medicamento guardado en AsyncStorage:', medicamentoConDosis);
+    } catch (error) {
+      console.error('Error guardando el medicamento:', error);
+    }
+  };
+
   const handleNavigateToMedication = (medicamento) => {
+    handleSaveToStorage(medicamento);
     navigation.navigate('MedicationScreen', { medicamentoNombre: medicamento.nombre });
   };
 
@@ -48,7 +76,6 @@ const SearchScreen = () => {
     <View style={styles.container}>
       {/* Contenedor Azul */}
       <View style={styles.topContainer}>
-        {/* Ajuste para colocar el botón y el texto en la misma fila */}
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Icon name="arrow-back" size={24} color="#ffffff" />
@@ -78,25 +105,23 @@ const SearchScreen = () => {
             </Text>
           </View>
         ) : (
-          <>
-            <FlatList
-              data={filteredMedicamentos}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderMedicamento}
-              contentContainerStyle={styles.resultsContainer}
-              ListEmptyComponent={
-                <View style={styles.noResultsContainer}>
-                  <Text style={styles.noResultsText}>No se encontraron medicamentos.</Text>
-                  <Text style={styles.noResultsInfoText}>
-                    ¿No encuentra el medicamento?
-                    <TouchableOpacity onPress={handleNavigateToPresentation}>
-                      <Text style={styles.createCustomNameText}> Pulse aquí para crear un nombre personalizado</Text>
-                    </TouchableOpacity>
-                  </Text>
-                </View>
-              }
-            />
-          </>
+          <FlatList
+            data={filteredMedicamentos}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderMedicamento}
+            contentContainerStyle={styles.resultsContainer}
+            ListEmptyComponent={
+              <View style={styles.noResultsContainer}>
+                <Text style={styles.noResultsText}>No se encontraron medicamentos.</Text>
+                <Text style={styles.noResultsInfoText}>
+                  ¿No encuentra el medicamento?
+                  <TouchableOpacity onPress={handleNavigateToPresentation}>
+                    <Text style={styles.createCustomNameText}> Pulse aquí para crear un nombre personalizado</Text>
+                  </TouchableOpacity>
+                </Text>
+              </View>
+            }
+          />
         )}
       </View>
     </View>
@@ -117,7 +142,7 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '85%', // Ajuste para que no quede pegado a los bordes
+    width: '85%',
     marginBottom: 30,
   },
   headerText: {
@@ -125,7 +150,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
-    marginLeft: 15, // Espacio entre el icono y el texto
+    marginLeft: 15,
   },
   subHeaderText: {
     fontSize: 16,

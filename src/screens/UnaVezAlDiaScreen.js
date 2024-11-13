@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, Dimensions, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TimePickerModal } from 'react-native-paper-dates';
 
 const { width, height } = Dimensions.get('window');
@@ -11,6 +12,8 @@ const UnaVezAlDiaScreen = ({ navigation }) => {
   const { medicamentoNombre } = route.params;
   const [visible, setVisible] = useState(false);
   const [selectedTime, setSelectedTime] = useState("10:00 AM");
+  const [doseAmount, setDoseAmount] = useState("1"); // Estado para la cantidad de dosis
+  const [selectedMoment, setSelectedMoment] = useState("antes"); // Momento de la comida
 
   const onConfirm = ({ hours, minutes }) => {
     const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -20,6 +23,55 @@ const UnaVezAlDiaScreen = ({ navigation }) => {
     setVisible(false);
   };
 
+  // Función para guardar la dosis completa en AsyncStorage sin sobrescribir el array de `dosis`
+  const handleSaveTime = async () => {
+    try {
+      // Recuperar los datos almacenados
+      const storedData = await AsyncStorage.getItem('selectedMedicamentos');
+      const parsedData = storedData ? JSON.parse(storedData) : [];
+  
+      // Actualizar el medicamento sin crear un nuevo objeto de dosis
+      const updatedData = parsedData.map((medicamento) => {
+        if (medicamento.nombre === medicamentoNombre) {
+          const existingDoses = Array.isArray(medicamento.dosis) ? medicamento.dosis : [];
+          
+          // Actualizar la última dosis en el array `dosis` existente
+          if (existingDoses.length > 0) {
+            // Actualiza los datos de la última dosis
+            existingDoses[existingDoses.length - 1] = {
+              ...existingDoses[existingDoses.length - 1],
+              hora_dosis: selectedTime,
+              cantidadP: parseInt(doseAmount, 10),
+              momento_comida: selectedMoment,
+            };
+          } else {
+            // Si no hay dosis, crea la primera entrada
+            existingDoses.push({
+              numero_dosis: 1,
+              hora_dosis: selectedTime,
+              cantidadP: parseInt(doseAmount, 10),
+              momento_comida: selectedMoment,
+            });
+          }
+  
+          // Retornar el medicamento actualizado con `numero_dosis` ajustado
+          return { 
+            ...medicamento, 
+            numero_dosis: existingDoses.length,  // Actualiza el número de dosis total
+            dosis: existingDoses // Mantiene el array de dosis existente
+          };
+        }
+        return medicamento;
+      });
+  
+      // Guardar los datos actualizados
+      await AsyncStorage.setItem('selectedMedicamentos', JSON.stringify(updatedData));
+      console.log('Dosis actualizada en AsyncStorage:', updatedData);
+    } catch (error) {
+      console.error('Error guardando la información de la dosis:', error);
+    }
+  };
+  
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#B5D6FD" barStyle="light-content" />
@@ -32,24 +84,38 @@ const UnaVezAlDiaScreen = ({ navigation }) => {
         </View>
         <View style={styles.iconContainer}>
           <Ionicons name="alarm" size={width * 0.2} color="white" />
-          <Text style={styles.questionText}>do debe tomar la dosis?</Text>
+          <Text style={styles.questionText}>¿Cuándo la dosis?</Text>
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
-        <View style={{ flex: 1, justifyContent: 'space-between' }}>
-          <TouchableOpacity style={styles.timePicker} onPress={() => setVisible(true)}>
-            <Text style={styles.timePickerText}>Tomar a las</Text>
-            <Text style={styles.selectedTime}>{selectedTime}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('AdditionalForm', { medicamentoNombre })}
-          >
-            <Text style={styles.buttonText}>Próximo</Text>
-          </TouchableOpacity>
+        {/* Nueva sección para cantidad de dosis */}
+        <View style={styles.doseContainer}>
+          <Text style={styles.doseLabel}>Tomar</Text>
+          <TextInput
+            style={styles.doseInput}
+            value={doseAmount}
+            keyboardType="numeric"
+            onChangeText={(text) => setDoseAmount(text)}
+          />
+          <Text style={styles.doseLabel}>pastilla(s)</Text>
         </View>
+
+        {/* Sección de selección de hora */}
+        <TouchableOpacity style={styles.timePicker} onPress={() => setVisible(true)}>
+          <Text style={styles.timePickerText}>Tomar a las</Text>
+          <Text style={styles.selectedTime}>{selectedTime}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={async () => {
+            await handleSaveTime();  // Guardar la información de la dosis en AsyncStorage
+            navigation.navigate('AdditionalForm', { medicamentoNombre });
+          }}
+        >
+          <Text style={styles.buttonText}>Próximo</Text>
+        </TouchableOpacity>
 
         <TimePickerModal
           visible={visible}
@@ -63,6 +129,7 @@ const UnaVezAlDiaScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -107,6 +174,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     paddingBottom: height * 0.02,
   },
+  doseContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f0f0f0',
+    padding: height * 0.02,
+    borderRadius: 10,
+    marginBottom: height * 0.02,
+  },
+  doseLabel: {
+    fontSize: width * 0.045,
+    color: '#000',
+  },
+  doseInput: {
+    fontSize: width * 0.045,
+    color: '#000',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E90FF',
+    marginHorizontal: 5,
+    width: 40,
+    textAlign: 'center',
+  },
   timePicker: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -130,7 +219,6 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.02,
     borderRadius: 25,
     alignItems: 'center',
-    // marginTop: 180, // Eliminado para usar Flexbox
   },
   buttonText: {
     color: '#FFFFFF',

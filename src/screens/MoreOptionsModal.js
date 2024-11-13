@@ -7,7 +7,7 @@ const MoreOptionsModal = ({ visible, onClose, navigation }) => {
   const options = [
     { text: 'Agenda', iconName: 'calendar', navigateTo: 'AgendaScreen' },
     { text: 'Cita', iconName: 'calendar-check', navigateTo: 'AppointmentScreen' },
-    { text: 'Médicos', iconName: 'doctor', navigateTo: 'DoctorsScreen' },
+    { text: 'Médicos', iconName: 'doctor', navigateTo: 'AddDoctorScreen' },
     { text: 'Configuración', iconName: 'cog', navigateTo: 'SettingsScreen' },
   ];
 

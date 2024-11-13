@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { View, StyleSheet, Dimensions, SafeAreaView, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoute } from '@react-navigation/native';
-import MedicationHeader from '../components/MedicationHeader'; // Importa el componente de cabecera
-import TimePickerRow from '../components/TimePickerRow'; // Importa el componente para seleccionar horas
-import DosisInputRow from '../components/DosisInputRow'; // Importa el componente para la dosis
-import SaveButton from '../components/SaveButton'; // Importa el componente del botón de guardar
+import MedicationHeader from '../components/MedicationHeader';
+import TimePickerRow from '../components/TimePickerRow';
+import DosisInputRow from '../components/DosisInputRow';
+import SaveButton from '../components/SaveButton';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,7 +20,7 @@ const TwiceaDay = ({ navigation }) => {
   const [selectedTime2, setSelectedTime2] = useState('8:00 p.m.');
   const [dosis1, setDosis1] = useState('1');
   const [dosis2, setDosis2] = useState('1');
-  const [pickerType, setPickerType] = useState(null); // Identifica qué toma está seleccionando el usuario
+  const [pickerType, setPickerType] = useState(null);
 
   const showDatePicker = (toma) => {
     setPickerType(toma);
@@ -40,6 +41,56 @@ const TwiceaDay = ({ navigation }) => {
     hideDatePicker();
   };
 
+  // Función para guardar ambas dosis en AsyncStorage sin duplicar el array
+  const handleSaveDoseTimes = async () => {
+    try {
+      // Obtener todos los medicamentos almacenados
+      const storedData = await AsyncStorage.getItem('selectedMedicamentos');
+      const allMedicamentos = storedData ? JSON.parse(storedData) : [];
+
+      // Encontrar el medicamento específico
+      const updatedData = allMedicamentos.map((medicamento) => {
+        if (medicamento.nombre === medicamentoNombre) {
+          const existingDoses = Array.isArray(medicamento.dosis) ? medicamento.dosis : [];
+
+          // Actualizar los horarios y cantidad en las dosis ya existentes, sin duplicar el array
+          const updatedDoses = [
+            {
+              numero_dosis: 1,
+              hora_dosis: selectedTime1,
+              cantidadP: parseInt(dosis1, 10),
+              momento_comida: 'antes', // Ajustar según la lógica de la app
+            },
+            {
+              numero_dosis: 2,
+              hora_dosis: selectedTime2,
+              cantidadP: parseInt(dosis2, 10),
+              momento_comida: 'antes', // Ajustar también según sea necesario
+            },
+          ];
+
+          // Retornar el medicamento actualizado sin duplicar `dosis`
+          return {
+            ...medicamento,
+            numero_dosis: updatedDoses.length, // Actualiza el número de dosis total
+            dosis: updatedDoses,
+          };
+        }
+        return medicamento;
+      });
+
+      // Guardar los datos actualizados en AsyncStorage
+      await AsyncStorage.setItem('selectedMedicamentos', JSON.stringify(updatedData));
+      console.log('Dosis actualizadas en AsyncStorage:', updatedData);
+
+      Alert.alert('Éxito', 'Las dosis se guardaron correctamente.');
+      navigation.navigate('AdditionalForm', { medicamentoNombre });
+    } catch (error) {
+      console.error('Error guardando las dosis:', error);
+      Alert.alert('Error', 'Hubo un problema al guardar las dosis.');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Usa el componente MedicationHeader */}
@@ -47,7 +98,7 @@ const TwiceaDay = ({ navigation }) => {
         navigation={navigation}
         title={medicamentoNombre}
         iconName="alarm-outline"
-        questionText="do quieres que te lo recuerden?"
+        questionText="¿Cuándo quieres que te lo recuerden?"
       />
 
       <View style={styles.lowerSection}>
@@ -75,10 +126,10 @@ const TwiceaDay = ({ navigation }) => {
           label="Dosis (pastilla(s))"
         />
 
-        {/* Botón Próximo */}
+        {/* Botón Guardar */}
         <SaveButton
-          buttonText="Próximo"
-          onPress={() => navigation.navigate('AdditionalForm', { medicamentoNombre })}
+          buttonText="Guardar"
+          onPress={handleSaveDoseTimes}
         />
       </View>
 
@@ -88,12 +139,11 @@ const TwiceaDay = ({ navigation }) => {
         mode="time"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
-        is24Hour={false} // Formato de 12 horas
+        is24Hour={false}
       />
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
