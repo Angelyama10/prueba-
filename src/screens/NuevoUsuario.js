@@ -1,15 +1,40 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Alert } from 'react-native';
 import FromComponents from '../components/FromComponents';
+import { registerUser } from '../services/usuarios.service';
 
 const NuevoUsuario = ({ navigation }) => {
-  
-  const handleRegister = () => {
-    // Aquí puedes manejar el envío del formulario, por ejemplo, llamar a una API
-    if (password === confirmPassword) {
-      alert(`Usuario registrado:\nNombre: ${username}\nApellidos: ${lastName}`);
-    } else {
-      alert('Las contraseñas no coinciden');
+  const handleRegister = async (userData) => {
+    // Validaciones básicas
+    const { username, lastName, birthdate, gender, password, confirmPassword } = userData;
+
+    if (!username || !lastName || !birthdate || !gender || !password || !confirmPassword) {
+      Alert.alert('Error', 'Todos los campos son obligatorios');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Las contraseñas no coinciden');
+      return;
+    }
+
+    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(birthdate); // Formato: YYYY-MM-DD
+    if (!isValidDate) {
+      Alert.alert('Error', 'La fecha de nacimiento debe estar en el formato YYYY-MM-DD');
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    try {
+      const response = await registerUser(userData);
+      Alert.alert('Éxito', 'Usuario registrado correctamente');
+      navigation.navigate('Login'); // Redirige a la pantalla de inicio de sesión
+    } catch (error) {
+      Alert.alert('Error', `No se pudo registrar el usuario: ${error.message}`);
     }
   };
 
@@ -32,7 +57,6 @@ const NuevoUsuario = ({ navigation }) => {
           confirmPassword: "Confirmar contraseña"
         }}
       />
-      
     </ScrollView>
   );
 };

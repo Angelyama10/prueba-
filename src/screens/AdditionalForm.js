@@ -61,8 +61,8 @@ const AdditionalForm = ({ navigation }) => {
     
       Alert.alert('Éxito', 'Datos enviados correctamente.');
       
-      // Limpiar AsyncStorage
-      await AsyncStorage.clear();
+      // Limpiar solo los datos del medicamento
+      await AsyncStorage.removeItem('selectedMedicamentos');
       
       // Navegar a la pantalla Home
       navigation.navigate('Home');
@@ -73,6 +73,7 @@ const AdditionalForm = ({ navigation }) => {
       setIsButtonDisabled(false);
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>

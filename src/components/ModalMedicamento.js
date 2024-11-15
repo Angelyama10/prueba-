@@ -13,8 +13,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const ModalMedicamento = ({ visible, onClose, nombre, hora, unidad, cantidad, momentoComida, icono }) => {
-  const navigation = useNavigation(); // Hook para obtener el objeto de navegación
+const ModalMedicamento = ({ visible, onClose, id, nombre, hora, unidad, cantidad, momentoComida, icono }) => {
+  const navigation = useNavigation();
+
+  // Verificar que `id` se está recibiendo correctamente
+  console.log("ID del medicamento en el Modal:", id);
 
   return (
     <Modal
@@ -28,7 +31,6 @@ const ModalMedicamento = ({ visible, onClose, nombre, hora, unidad, cantidad, mo
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
               <View style={styles.header}>
-                {/* Icono del medicamento */}
                 <Icon name={icono} size={48} color="#5A9BD3" />
                 <Text style={styles.medicamentoNombre}>{nombre}</Text>
               </View>
@@ -39,7 +41,13 @@ const ModalMedicamento = ({ visible, onClose, nombre, hora, unidad, cantidad, mo
                   <Icon name="trash-can-outline" size={24} color="#333333" />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('EditMedicationScreen', { medicamentoNombre: nombre })}
+                  onPress={() => {
+                    if (id) {
+                      navigation.navigate('EditMedicationScreen', { id });
+                    } else {
+                      console.error("ID no definido al intentar navegar");
+                    }
+                  }}
                   style={{ marginLeft: 15 }}
                 >
                   <Icon name="pencil-outline" size={24} color="#333333" />
@@ -80,6 +88,7 @@ const ModalMedicamento = ({ visible, onClose, nombre, hora, unidad, cantidad, mo
     </Modal>
   );
 };
+
 
 const styles = StyleSheet.create({
   overlay: {

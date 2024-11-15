@@ -26,6 +26,9 @@ import DailyReminderSettings from './src/screens/DailyReminderSettings';
 import DailyMultipleReminders from './src/screens/DailyMultipleReminders';
 import Progress from './src/screens/Progress';
 import EditMedicationScreen from './src/screens/EditMedicationScreen';
+import HomeAgenda from './src/screens/HomeAgenda';
+import CitasMedicas from './src/screens/CitasMedicas';
+import DoctorsScreen from './src/screens/DoctorsScreen';
 
 import AppointmentScreen from './src/screens/AppointmentScreen';
 import AddDoctorScreen from './src/screens/AddDoctorScreen';
@@ -84,6 +87,9 @@ const App = () => {
         <Stack.Screen name="DailyReminderSettings" component={DailyReminderSettings} />
         <Stack.Screen name="DailyMultipleReminders" component={DailyMultipleReminders} />
         <Stack.Screen name="EditMedicationScreen" component={EditMedicationScreen} />
+        <Stack.Screen name="HomeAgenda" component={HomeAgenda} />
+        <Stack.Screen name="CitasMedicas" component={CitasMedicas} />
+        <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
 
         <Stack.Screen name="ReminderSettings" component={ReminderSettings} />
         <Stack.Screen name="AppointmentScreen" component={AppointmentScreen} />

@@ -11,13 +11,30 @@ import {
   Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../services/auth.service';
 import ErrorModal from '../components/ErrorModal';
 import { LogBox } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 LogBox.ignoreAllLogs();
+
+const decodeJWT = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Error decodificando JWT:", error);
+    return null;
+  }
+};
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -44,7 +61,18 @@ const LoginScreen = ({ navigation }) => {
         // Guardar el token en AsyncStorage
         await AsyncStorage.setItem('userToken', response.access_token);
 
-        navigation.navigate('Home');
+        // Decodificar el token JWT manualmente
+        const decodedToken = decodeJWT(response.access_token);
+        const userId = decodedToken?.sub;
+        const userName = decodedToken?.username;
+
+        if (userId && userName) {
+          await AsyncStorage.setItem('userId', userId.toString());
+          await AsyncStorage.setItem('userName', userName);
+          navigation.navigate('Home');
+        } else {
+          throw new Error("Datos de usuario incompletos en el token");
+        }
       } else {
         setErrorMessage('Usuario o contraseña incorrectos. Intenta de nuevo o restablece tu contraseña.');
         setErrorVisible(true);
@@ -68,8 +96,6 @@ const LoginScreen = ({ navigation }) => {
         colors={['#B5D6FD', '#FFFFFF']}
         style={styles.background}
       >
-        <View style={styles.topDecoration} />
-
         <View style={styles.contentContainer}>
           <View style={styles.topContainer}>
             <Text style={styles.welcomeText}>Bienvenido</Text>
@@ -112,6 +138,7 @@ const LoginScreen = ({ navigation }) => {
 
             <TouchableOpacity
               onPress={() => {
+                console.log('Navegación a recuperación de contraseña'); // Consola para verificar
                 // Navegar a la pantalla de recuperación de contraseña
               }}
             >
@@ -121,15 +148,17 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.registerContainer}>
               <Text style={styles.noAccountText}>¿No tienes una cuenta?</Text>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Nuevo')}
+                style={styles.registerButton}
+                onPress={() => {
+                  console.log('Navegación a pantalla de registro'); // Consola para verificar
+                  navigation.navigate('Nuevo');
+                }}
               >
-                <Text style={styles.registerText}>Regístrate</Text>
+                <Text style={styles.registerButtonText}>Regístrate</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-
-        <View style={styles.bottomDecoration} />
 
         <ErrorModal
           visible={errorVisible}
@@ -140,6 +169,7 @@ const LoginScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -150,26 +180,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
-  },
-  topDecoration: {
-    position: 'absolute',
-    top: -height * 0.1,
-    left: -width * 0.3,
-    width: width * 1,
-    height: width * 1,
-    backgroundColor: '#5A9BD3',
-    borderRadius: width * 0.5,
-    opacity: 0.2,
-  },
-  bottomDecoration: {
-    position: 'absolute',
-    bottom: -height * 0.1,
-    right: -width * 0.3,
-    width: width * 1,
-    height: width * 1,
-    backgroundColor: '#5A9BD3',
-    borderRadius: width * 0.5,
-    opacity: 0.2,
+    paddingHorizontal: '8%',
   },
   topContainer: {
     alignItems: 'center',
@@ -187,7 +198,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   formContainer: {
-    paddingHorizontal: '8%',
     alignItems: 'center',
     marginTop: height * 0.02,
   },
@@ -241,11 +251,17 @@ const styles = StyleSheet.create({
     fontSize: width * 0.042,
     color: '#000',
   },
-  registerText: {
-    fontSize: width * 0.042,
-    color: '#5A9BD3',
+  registerButton: {
     marginLeft: width * 0.01,
-    textDecorationLine: 'underline',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#5A9BD3',
+    borderRadius: width * 0.02,
+  },
+  registerButtonText: {
+    color: '#FFFFFF',
+    fontSize: width * 0.042,
+    fontWeight: 'bold',
   },
 });
 

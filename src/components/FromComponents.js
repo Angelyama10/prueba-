@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 const FromComponents = ({ navigation, onRegister, placeholders }) => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,11 @@ const FromComponents = ({ navigation, onRegister, placeholders }) => {
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSubmit = () => {
+    const userData = { username, lastName, birthdate, gender, password, confirmPassword };
+    onRegister(userData);
+  };
 
   return (
     <View style={styles.formContainer}>
@@ -34,32 +40,46 @@ const FromComponents = ({ navigation, onRegister, placeholders }) => {
       </View>
       
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder={placeholders.birthdate}
-          value={birthdate}
-          onChangeText={setBirthdate}
-          underlineColorAndroid="transparent"
-          placeholderTextColor="#000"
-        />
-      </View>
+  <TextInput
+    style={styles.input}
+    placeholder={placeholders.birthdate}
+    value={birthdate}
+    onChangeText={(text) => {
+      const formattedDate = text
+        .replace(/\D/g, '')
+        .replace(/(\d{4})(\d{2})?(\d{2})?/, (match, year, month, day) => {
+          if (day) return `${year}-${month}-${day}`;
+          if (month) return `${year}-${month}`;
+          return year;
+        });
+
+      setBirthdate(formattedDate);
+    }}
+    keyboardType="numeric"
+    underlineColorAndroid="transparent"
+    placeholderTextColor="#000"
+    maxLength={10}
+  />
+</View>
+
       
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder={placeholders.gender}
-          value={gender}
-          onChangeText={setGender}
-          underlineColorAndroid="transparent"
-          placeholderTextColor="#000"
-        />
+        <Picker
+          selectedValue={gender}
+          onValueChange={(itemValue) => setGender(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Selecciona tu género" value="" />
+          <Picker.Item label="Masculino" value="Masculino" />
+          <Picker.Item label="Femenino" value="Femenino" />
+        </Picker>
       </View>
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder={placeholders.password}
-          secureTextEntry
+          secureTextEntry // Oculta el texto de la contraseña
           value={password}
           onChangeText={setPassword}
           underlineColorAndroid="transparent"
@@ -71,7 +91,7 @@ const FromComponents = ({ navigation, onRegister, placeholders }) => {
         <TextInput
           style={styles.input}
           placeholder={placeholders.confirmPassword}
-          secureTextEntry
+          secureTextEntry // Oculta el texto de confirmación de contraseña
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           underlineColorAndroid="transparent"
@@ -85,7 +105,7 @@ const FromComponents = ({ navigation, onRegister, placeholders }) => {
       </View>
 
       {/* Botón de Registro */}
-      <TouchableOpacity style={styles.registerButton} onPress={onRegister}>
+      <TouchableOpacity style={styles.registerButton} onPress={handleSubmit}>
         <Text style={styles.registerButtonText}>Registrarte</Text>
       </TouchableOpacity>
 
@@ -114,7 +134,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-    marginBottom: 40, // Aumenta el margen inferior para más separación
+    marginBottom: 20,
   },
   input: {
     height: 40,
@@ -124,6 +144,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#DBEBFF',
     fontSize: 18,
     color: '#000',
+  },
+  picker: {
+    height: 40,
+    width: '100%',
+    color: '#000',
+    backgroundColor: '#DBEBFF',
   },
   termsContainer: {
     marginBottom: 20,

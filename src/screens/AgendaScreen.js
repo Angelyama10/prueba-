@@ -52,7 +52,9 @@ const AgendaScreen = ({ navigation }) => {
                     value={nota}
                     placeholder="Escribe aquí tu anotación"
                 />
-                 <DateComponent />
+                 <View style={styles.dateContainer}>
+                  <DateComponent />
+                 </View>
 
                 <View style={styles.infoSection}>
                     
@@ -131,14 +133,24 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     textInput: {
-        borderColor: '#ccc',
+        borderColor: '#EAF2F8',
+        backgroundColor: '#EAF2F8',
         borderWidth: 1,
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 10,
         height: 150,
         textAlignVertical: 'top',
+        fontSize: 16,
+        color: '#333',
     },
-    infoSection: {
+    dateContainer: {
+        backgroundColor: '#EAF2F8',
+        borderRadius: 10,
+        padding: 10,
+        marginTop: 30, // Aumenta el margen superior para dar más espacio
+        justifyContent: 'center',
+    },
+       infoSection: {
         marginTop: 20,
     },
     dateAndTypeSection: {
@@ -150,7 +162,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 10, // Espacio entre el componente de fecha y el tipo de anotación
+        marginTop: 10,
     },
     annotationTypeTitle: {
         fontSize: 16,
@@ -177,5 +189,6 @@ const styles = StyleSheet.create({
         color: 'red',
     },
 });
+
 
 export default AgendaScreen;
