@@ -1,11 +1,13 @@
 // user.service.js
 import { REACT_URI_API } from '@env';
 
-const ApiUrl = `${REACT_URI_API}/users`; // Ruta actualizada a /users
+// URL base para las solicitudes de usuario
+const ApiUrl = `${REACT_URI_API}/users`;
 
 export const registerUser = async (userData) => {
   try {
-    console.log("Datos que se envían a la API para registrar usuario:", userData); // Log para depuración
+    console.log("Datos que se envían a la API para registrar usuario:", userData);
+
     const response = await fetch(ApiUrl, {
       method: 'POST',
       headers: {
@@ -15,18 +17,19 @@ export const registerUser = async (userData) => {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Error al registrar usuario: ${errorText}`);
-      throw new Error(`Error al registrar usuario: ${errorText}`);
+      const errorDetails = await response.json();
+      console.error("Error al registrar usuario:", errorDetails);
+      throw new Error(errorDetails.message || 'Error al registrar usuario');
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error en registerUser:", error);
+    console.error("Error en registerUser:", error.message);
     throw error;
   }
 };
+
 
 export const getUserById = async (token, userId) => {
   try {
@@ -57,6 +60,7 @@ export const getUserById = async (token, userId) => {
     throw error;
   }
 };
+
 
 
 

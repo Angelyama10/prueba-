@@ -1,60 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FromComponents from '../components/FromComponents';
-import { registerUser } from '../services/usuarios.service';
+import { registerUser } from '../services/user.service'; // Importación correcta
 
 const NuevoUsuario = ({ navigation }) => {
   const handleRegister = async (userData) => {
-    // Validaciones básicas
-    const { username, lastName, birthdate, gender, password, confirmPassword } = userData;
-
-    if (!username || !lastName || !birthdate || !gender || !password || !confirmPassword) {
-      Alert.alert('Error', 'Todos los campos son obligatorios');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Las contraseñas no coinciden');
-      return;
-    }
-
-    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(birthdate); // Formato: YYYY-MM-DD
-    if (!isValidDate) {
-      Alert.alert('Error', 'La fecha de nacimiento debe estar en el formato YYYY-MM-DD');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
-      return;
-    }
-
     try {
+      console.log('Datos enviados al registro:', userData);
+
       const response = await registerUser(userData);
+
       Alert.alert('Éxito', 'Usuario registrado correctamente');
-      navigation.navigate('Login'); // Redirige a la pantalla de inicio de sesión
+      navigation.navigate('Login');
     } catch (error) {
-      Alert.alert('Error', `No se pudo registrar el usuario: ${error.message}`);
+      Alert.alert('Error', error.message || 'Hubo un problema al procesar el registro');
+      console.error('Error en handleRegister:', error);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.topContainer}>
+        <Icon name="account-plus" size={100} color="#5A9BD3" />
         <Text style={styles.title}>Rellena tus datos</Text>
-        <Image source={require('../../assets/images/Nuevo_usuario.jpg')} style={styles.image} />
       </View>
-
-      <FromComponents 
-        onRegister={handleRegister} 
-        navigation={navigation} 
+      <FromComponents
+        onRegister={handleRegister}
+        navigation={navigation}
         placeholders={{
-          username: "Nombres",
-          lastName: "Apellidos",
-          birthdate: "Fecha de nacimiento",
-          gender: "Sexo",
-          password: "Contraseña",
-          confirmPassword: "Confirmar contraseña"
+          username: 'Nombres',
+          lastName: 'Apellidos',
+          birthdate: 'Fecha de nacimiento (dd/mm/aaaa)',
+          gender: 'Sexo',
+          password: 'Contraseña',
+          confirmPassword: 'Confirmar contraseña',
+          email: 'Correo electrónico',
         }}
       />
     </ScrollView>
@@ -64,7 +45,7 @@ const NuevoUsuario = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#FFFFFF', // Fondo blanco para el contenedor principal
+    backgroundColor: '#FFFFFF',
     paddingVertical: 20,
   },
   topContainer: {
@@ -72,16 +53,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 45,
-    fontFamily: 'YanoneKaffeesatz-Regular',
-    marginBottom: 10,
-    color: '#000000',
-  },
-  image: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-    marginBottom: 20,
+    fontSize: 24,
+    fontWeight: '600',
+    marginTop: 10,
+    color: '#333333',
   },
 });
 
