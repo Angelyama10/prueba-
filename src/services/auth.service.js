@@ -1,3 +1,4 @@
+
 import { REACT_URI_API } from '@env';
 
 const ApiUrl = REACT_URI_API;
@@ -33,6 +34,7 @@ export const auth = async (dataUser) => {
     return dataAuth; // Esto debería contener el token si es exitoso
   } catch (error) {
     console.error("Error en autenticación (catch):", error);
+
     throw error;
   }
 };
