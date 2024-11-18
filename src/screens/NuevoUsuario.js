@@ -2,15 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FromComponents from '../components/FromComponents';
-import { registerUser } from '../services/user.service'; // Importación correcta
+import { registerUser } from '../services/usuarios.service'; // Importación correcta
 
 const NuevoUsuario = ({ navigation }) => {
   const handleRegister = async (userData) => {
     try {
       console.log('Datos enviados al registro:', userData);
-
       const response = await registerUser(userData);
-
       Alert.alert('Éxito', 'Usuario registrado correctamente');
       navigation.navigate('Login');
     } catch (error) {
@@ -18,6 +16,7 @@ const NuevoUsuario = ({ navigation }) => {
       console.error('Error en handleRegister:', error);
     }
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

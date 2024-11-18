@@ -7,12 +7,14 @@ import {
     TouchableOpacity,
     TextInput,
     ScrollView,
+    Alert,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import 'moment/locale/es';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { sendAppointment } from '../services/appointment.service'; // Importa el servicio
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,36 +26,46 @@ const AppointmentScreen = ({ navigation }) => {
     const [note, setNote] = useState('');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    // Cargar la fecha guardada desde AsyncStorage al montar el componente
-    useEffect(() => {
-        const loadTime = async () => {
-            try {
-                const storedTime = await AsyncStorage.getItem('appointmentTime');
-                if (storedTime) {
-                    setTime(storedTime);
-                }
-            } catch (error) {
-                console.error('Error loading time from AsyncStorage:', error);
-            }
-        };
-        loadTime();
-    }, []);
-
-    const handleConfirm = async (selectedDate) => {
-        setDatePickerVisibility(false);
-        const formattedDate = moment(selectedDate).locale('es').format('dddd, D [de] MMMM [de] YYYY, h:mm A');
-        setTime(formattedDate);
-
-        // Guardar la fecha y hora seleccionada en AsyncStorage
+    const handleSave = async () => {
+        if (!title || !doctor || !time || !location) {
+            Alert.alert('Error', 'Por favor, complete todos los campos requeridos.');
+            return;
+        }
+    
         try {
-            await AsyncStorage.setItem('appointmentTime', formattedDate);
+            const token = await AsyncStorage.getItem('userToken');
+            if (!token) {
+                Alert.alert('Error', 'No se encontró el token de autenticación.');
+                return;
+            }
+    
+            // Preparar los datos con los nombres requeridos por la API
+            const appointmentData = {
+                nombre_cita: title,
+                medico: doctor,
+                hora: time,
+                ubicacion_hospital: location,
+                notas: note,
+            };
+    
+            console.log('Datos preparados para enviar:', appointmentData);
+    
+            // Llamar al servicio para enviar la cita médica
+            const response = await sendAppointment(token, appointmentData);
+            Alert.alert('Éxito', 'La cita médica ha sido guardada correctamente.');
+            console.log('Respuesta de la API:', response);
+    
+            navigation.goBack(); // Regresar a la pantalla anterior
         } catch (error) {
-            console.error('Error saving time to AsyncStorage:', error);
+            console.error('Error al guardar la cita médica:', error.message);
+            Alert.alert('Error', 'No se pudo guardar la cita médica. Por favor, inténtelo de nuevo.');
         }
     };
+    
 
     return (
         <View style={styles.container}>
+            {/* Header */}
             <View style={styles.header}>
                 <View style={styles.headerRow}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -63,52 +75,72 @@ const AppointmentScreen = ({ navigation }) => {
                 </View>
             </View>
 
+            {/* Formulario */}
             <ScrollView contentContainerStyle={styles.content}>
+                <Text style={styles.label}>Título de la cita</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Escriba título de la cita"
+                    placeholder="Ej. Consulta médica"
                     value={title}
+                    placeholderTextColor="#666"
                     onChangeText={text => setTitle(text)}
                 />
-                <TouchableOpacity style={styles.input}>
-                    <Text style={styles.placeholderText}>
-                        {doctor ? doctor : 'Elige médico'}
-                    </Text>
-                </TouchableOpacity>
+
+                <Text style={styles.label}>Nombre del médico</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Ej. Dr. Juan Pérez"
+                    value={doctor}
+                    placeholderTextColor="#666"
+                    onChangeText={text => setDoctor(text)}
+                />
+
+                <Text style={styles.label}>Fecha y Hora</Text>
                 <TouchableOpacity
                     style={styles.input}
                     onPress={() => setDatePickerVisibility(true)}
                 >
-                    <Text style={styles.placeholderText}>
-                        {time ? time : 'Configure hora del agendamiento'}
+                    <Text style={time ? styles.text : styles.placeholder}>
+                        {time || 'Seleccione la fecha y hora'}
                     </Text>
                 </TouchableOpacity>
+
+                <Text style={styles.label}>Ubicación</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Ubicación"
+                    placeholder="Ej. Clínica ABC"
                     value={location}
+                    placeholderTextColor="#666"
                     onChangeText={text => setLocation(text)}
                 />
+
+                <Text style={styles.label}>Nota adicional</Text>
                 <TextInput
                     style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
-                    placeholder="Escribir Anotación"
+                    placeholder="Detalles adicionales (opcional)"
                     value={note}
+                    placeholderTextColor="#666"
                     multiline
                     onChangeText={text => setNote(text)}
                 />
             </ScrollView>
 
+            {/* Botón Guardar */}
             <TouchableOpacity
                 style={styles.saveButton}
-                onPress={() => {/* Funcionalidad para guardar */ }}
+                onPress={handleSave}
             >
                 <Text style={styles.saveButtonText}>Guardar</Text>
             </TouchableOpacity>
 
+            {/* DateTime Picker */}
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="datetime"
-                onConfirm={handleConfirm}
+                onConfirm={(date) => {
+                    setDatePickerVisibility(false);
+                    setTime(moment(date).locale('es').format('YYYY-MM-DD HH:mm'));
+                }}
                 onCancel={() => setDatePickerVisibility(false)}
                 locale="es_ES"
                 is24Hour
@@ -120,58 +152,65 @@ const AppointmentScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#ffffff',
     },
     header: {
         width: '100%',
         paddingVertical: height * 0.05,
         backgroundColor: '#5A9BD3',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     headerRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '100%',
         justifyContent: 'space-between',
-        paddingHorizontal: 10,
+        width: '90%',
     },
     headerText: {
         fontSize: width * 0.05,
-        color: '#FFFFFF',
+        color: '#ffffff',
         fontWeight: 'bold',
-        textAlign: 'center',
     },
     content: {
         padding: 20,
     },
-    input: {
-        borderColor: '#EAF2F8',
-        backgroundColor: '#EAF2F8',
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 10,
-        marginTop: 15,
+    label: {
         fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 5,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        fontSize: 16,
+        backgroundColor: '#f9f9f9',
         color: '#333',
     },
-    placeholderText: {
-        color: '#7A7A7A',
+    placeholder: {
+        color: '#aaa',
+        fontSize: 16,
+    },
+    text: {
+        color: '#333',
         fontSize: 16,
     },
     saveButton: {
         backgroundColor: '#5A9BD3',
-        paddingVertical: 15,
-        paddingHorizontal: 50,
-        borderRadius: 25,
+        padding: 15,
+        borderRadius: 10,
         alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 30,
         marginHorizontal: 20,
+        marginBottom: 20,
     },
     saveButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
+        color: '#ffffff',
         fontWeight: 'bold',
+        fontSize: 16,
     },
 });
 

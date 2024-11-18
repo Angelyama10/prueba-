@@ -30,7 +30,6 @@ export const registerUser = async (userData) => {
   }
 };
 
-
 export const getUserById = async (token, userId) => {
   try {
     const url = `${ApiUrl}/users/user?id=${userId}`;
