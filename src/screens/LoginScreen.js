@@ -3,10 +3,8 @@ import {
   View,
   Text,
   TextInput,
-  StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -14,10 +12,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../services/auth.service';
 import ErrorModal from '../components/ErrorModal';
-import { LogBox } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-LogBox.ignoreAllLogs();
 
 const decodeJWT = (token) => {
   try {
@@ -51,17 +45,12 @@ const LoginScreen = ({ navigation }) => {
       }
 
       const dataUser = { email, contraseña };
-      console.log("Datos de autenticación enviados:", dataUser);
 
       const response = await auth(dataUser);
 
       if (response?.access_token) {
-        console.log("Token recibido:", response.access_token);
-
-        // Guardar el token en AsyncStorage
         await AsyncStorage.setItem('userToken', response.access_token);
 
-        // Decodificar el token JWT manualmente
         const decodedToken = decodeJWT(response.access_token);
         const userId = decodedToken?.sub;
         const userName = decodedToken?.username;
@@ -89,77 +78,70 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <LinearGradient
         colors={['#B5D6FD', '#FFFFFF']}
-        style={styles.background}
+        className="flex-1"
       >
-        <View style={styles.contentContainer}>
-          <View style={styles.topContainer}>
-            <Text style={styles.welcomeText}>Bienvenido</Text>
+        <View className="flex-1 justify-center px-8">
+          {/* Sección Superior */}
+          <View className="items-center mb-4">
+            <Text className="text-2xl font-bold text-black mb-4">Bienvenido</Text>
             <Image
               source={require('../../assets/images/Login.jpg')}
-              style={styles.loginImage}
+              className="w-40 h-40"
+              resizeMode="contain"
             />
           </View>
 
-          <View style={styles.formContainer}>
-            <Text style={styles.loginText}>Iniciar sesión</Text>
+          {/* Formulario */}
+          <View className="mt-4 items-center">
+            <Text className="text-xl font-bold text-black mb-4">Iniciar sesión</Text>
 
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Correo electrónico"
-                placeholderTextColor="#888"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
+            <TextInput
+              className="w-full h-12 border border-gray-300 rounded-lg px-4 bg-white text-base text-black mb-3"
+              placeholder="Correo electrónico"
+              placeholderTextColor="#888"
+              value={email}
+              onChangeText={setEmail}
+            />
 
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Contraseña"
-                placeholderTextColor="#888"
-                secureTextEntry
-                value={contraseña}
-                onChangeText={setContraseña}
-              />
-            </View>
+            <TextInput
+              className="w-full h-12 border border-gray-300 rounded-lg px-4 bg-white text-base text-black mb-3"
+              placeholder="Contraseña"
+              placeholderTextColor="#888"
+              secureTextEntry
+              value={contraseña}
+              onChangeText={setContraseña}
+            />
 
             <TouchableOpacity
-              style={styles.loginButton}
+              className="w-full h-14 bg-blue-600 justify-center items-center rounded-lg mt-3"
               onPress={handleLogin}
             >
-              <Text style={styles.loginButtonText}>Entrar</Text>
+              <Text className="text-white text-base font-bold">Entrar</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => {
-                console.log('Navegación a recuperación de contraseña'); // Consola para verificar
-                // Navegar a la pantalla de recuperación de contraseña
-              }}
-            >
-              <Text style={styles.forgotPasswordText}>Recuperar contraseña</Text>
+            <TouchableOpacity>
+              <Text className="text-blue-600 text-sm mt-4 underline">Recuperar contraseña</Text>
             </TouchableOpacity>
 
-            <View style={styles.registerContainer}>
-              <Text style={styles.noAccountText}>¿No tienes una cuenta?</Text>
+            {/* Registro */}
+            <View className="flex-row mt-6 items-center">
+              <Text className="text-sm text-black">¿No tienes una cuenta?</Text>
               <TouchableOpacity
-                style={styles.registerButton}
-                onPress={() => {
-                  console.log('Navegación a pantalla de registro'); // Consola para verificar
-                  navigation.navigate('Nuevo');
-                }}
+                className="ml-2 px-4 py-2 bg-blue-600 rounded-lg"
+                onPress={() => navigation.navigate('Nuevo')}
               >
-                <Text style={styles.registerButtonText}>Regístrate</Text>
+                <Text className="text-white text-sm font-bold">Regístrate</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
+        {/* Modal de Error */}
         <ErrorModal
           visible={errorVisible}
           message={errorMessage}
@@ -169,100 +151,5 @@ const LoginScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: '8%',
-  },
-  topContainer: {
-    alignItems: 'center',
-    marginBottom: height * 0.02,
-  },
-  welcomeText: {
-    fontSize: width * 0.08,
-    fontWeight: 'bold',
-    color: '#000000',
-    marginBottom: height * 0.015,
-  },
-  loginImage: {
-    width: width * 0.4,
-    height: width * 0.4,
-    resizeMode: 'contain',
-  },
-  formContainer: {
-    alignItems: 'center',
-    marginTop: height * 0.02,
-  },
-  loginText: {
-    fontSize: width * 0.06,
-    color: '#000000',
-    marginBottom: height * 0.02,
-    fontWeight: 'bold',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: height * 0.015,
-  },
-  input: {
-    width: '100%',
-    height: height * 0.06,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: width * 0.02,
-    paddingHorizontal: width * 0.04,
-    backgroundColor: '#FFFFFF',
-    fontSize: width * 0.045,
-    color: '#000',
-  },
-  loginButton: {
-    width: '100%',
-    height: height * 0.065,
-    backgroundColor: '#5A9BD3',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: width * 0.02,
-    marginTop: height * 0.015,
-  },
-  loginButtonText: {
-    color: '#FFFFFF',
-    fontSize: width * 0.05,
-    fontWeight: 'bold',
-  },
-  forgotPasswordText: {
-    fontSize: width * 0.04,
-    color: '#5A9BD3',
-    marginTop: height * 0.015,
-    textDecorationLine: 'underline',
-  },
-  registerContainer: {
-    flexDirection: 'row',
-    marginTop: height * 0.025,
-    alignItems: 'center',
-  },
-  noAccountText: {
-    fontSize: width * 0.042,
-    color: '#000',
-  },
-  registerButton: {
-    marginLeft: width * 0.01,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#5A9BD3',
-    borderRadius: width * 0.02,
-  },
-  registerButtonText: {
-    color: '#FFFFFF',
-    fontSize: width * 0.042,
-    fontWeight: 'bold',
-  },
-});
 
 export default LoginScreen;

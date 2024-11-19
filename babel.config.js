@@ -1,9 +1,13 @@
 module.exports = {
-  presets: ['module:@react-native/babel-preset'],
+  presets: ['module:metro-react-native-babel-preset'], // Preset principal para React Native
   plugins: [
-    ['module:react-native-dotenv', {
-      moduleName: '@env',
-      path: '.env',
-    }],
+    [
+      'module:react-native-dotenv', // Plugin para manejar variables de entorno
+      {
+        moduleName: '@env',
+        path: '.env',
+      },
+    ],
+    'nativewind/babel', // Plugin para Tailwind CSS en React Native
   ],
 };
